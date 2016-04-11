@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
+import play.db.jpa.Model;
 
 
 /**
@@ -13,11 +14,8 @@ import play.db.jpa.GenericModel;
  */
 @Entity
 @NamedQuery(name="ProfesionalSaludEspecialidad.findAll", query="SELECT p FROM ProfesionalSaludEspecialidad p")
-public class ProfesionalSaludEspecialidad extends GenericModel implements Serializable {
+public class ProfesionalSaludEspecialidad extends Model implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@EmbeddedId
-	private ProfesionalSaludEspecialidadPK id;
 
 	private int prioridad;
 
@@ -32,14 +30,6 @@ public class ProfesionalSaludEspecialidad extends GenericModel implements Serial
 	private ProfesionalSalud profesionalsalud;
 
 	public ProfesionalSaludEspecialidad() {
-	}
-
-	public ProfesionalSaludEspecialidadPK getId() {
-		return this.id;
-	}
-
-	public void setId(ProfesionalSaludEspecialidadPK id) {
-		this.id = id;
 	}
 
 	public int getPrioridad() {

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
+import play.db.jpa.Model;
 
 import java.sql.Timestamp;
 
@@ -15,11 +16,8 @@ import java.sql.Timestamp;
  */
 @Entity
 @NamedQuery(name="CamaPaciente.findAll", query="SELECT c FROM CamaPaciente c")
-public class CamaPaciente extends GenericModel implements Serializable {
+public class CamaPaciente extends Model implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@EmbeddedId
-	private CamaPacientePK id;
 
 	private Timestamp fechaIngreso;
 
@@ -27,7 +25,7 @@ public class CamaPaciente extends GenericModel implements Serializable {
 
 	//bi-directional many-to-one association to Cama
 	@ManyToOne
-	@JoinColumn(name="idCama")
+	@JoinColumn(name="idCama", insertable=true, updatable=true)
 	private Cama cama;
 
 	//bi-directional many-to-one association to Paciente
@@ -36,14 +34,6 @@ public class CamaPaciente extends GenericModel implements Serializable {
 	private Paciente paciente;
 
 	public CamaPaciente() {
-	}
-
-	public CamaPacientePK getId() {
-		return this.id;
-	}
-
-	public void setId(CamaPacientePK id) {
-		this.id = id;
 	}
 
 	public Timestamp getFechaIngreso() {

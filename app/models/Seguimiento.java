@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
+import play.db.jpa.Model;
 
 import java.sql.Timestamp;
 
@@ -15,11 +16,8 @@ import java.sql.Timestamp;
  */
 @Entity
 @NamedQuery(name="Seguimiento.findAll", query="SELECT s FROM Seguimiento s")
-public class Seguimiento extends GenericModel implements Serializable {
+public class Seguimiento extends Model implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@EmbeddedId
-	private SeguimientoPK id;
 
 	private Timestamp fechaCambio;
 
@@ -34,14 +32,6 @@ public class Seguimiento extends GenericModel implements Serializable {
 	private Paciente paciente;
 
 	public Seguimiento() {
-	}
-
-	public SeguimientoPK getId() {
-		return this.id;
-	}
-
-	public void setId(SeguimientoPK id) {
-		this.id = id;
 	}
 
 	public Timestamp getFechaCambio() {
