@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
+import play.db.jpa.Model;
 
 
 /**
@@ -13,11 +14,8 @@ import play.db.jpa.GenericModel;
  */
 @Entity
 @NamedQuery(name="RecursoCirugia.findAll", query="SELECT r FROM RecursoCirugia r")
-public class RecursoCirugia extends GenericModel implements Serializable {
+public class RecursoCirugia extends Model implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@EmbeddedId
-	private RecursoCirugiaPK id;
 
 	private int cantidad;
 
@@ -32,14 +30,6 @@ public class RecursoCirugia extends GenericModel implements Serializable {
 	private Recurso recurso;
 
 	public RecursoCirugia() {
-	}
-
-	public RecursoCirugiaPK getId() {
-		return this.id;
-	}
-
-	public void setId(RecursoCirugiaPK id) {
-		this.id = id;
 	}
 
 	public int getCantidad() {

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
+import play.db.jpa.Model;
 
 import java.sql.Time;
 
@@ -15,11 +16,8 @@ import java.sql.Time;
  */
 @Entity
 @NamedQuery(name="CirugiaProcedimiento.findAll", query="SELECT c FROM CirugiaProcedimiento c")
-public class CirugiaProcedimiento extends GenericModel implements Serializable {
+public class CirugiaProcedimiento extends Model implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@EmbeddedId
-	private CirugiaProcedimientoPK id;
 
 	private Time horaFin;
 
@@ -39,14 +37,6 @@ public class CirugiaProcedimiento extends GenericModel implements Serializable {
 	private Procedimiento procedimiento;
 
 	public CirugiaProcedimiento() {
-	}
-
-	public CirugiaProcedimientoPK getId() {
-		return this.id;
-	}
-
-	public void setId(CirugiaProcedimientoPK id) {
-		this.id = id;
 	}
 
 	public Time getHoraFin() {

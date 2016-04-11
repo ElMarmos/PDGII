@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
+import play.db.jpa.Model;
 
 
 /**
@@ -13,11 +14,8 @@ import play.db.jpa.GenericModel;
  */
 @Entity
 @NamedQuery(name="Patientologia.findAll", query="SELECT p FROM Patientologia p")
-public class Patientologia extends GenericModel implements Serializable {
+public class Patientologia extends Model implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@EmbeddedId
-	private PatientologiaPK id;
 
 	private String nombre;
 
@@ -32,14 +30,6 @@ public class Patientologia extends GenericModel implements Serializable {
 	private Patologia patologia;
 
 	public Patientologia() {
-	}
-
-	public PatientologiaPK getId() {
-		return this.id;
-	}
-
-	public void setId(PatientologiaPK id) {
-		this.id = id;
 	}
 
 	public String getNombre() {

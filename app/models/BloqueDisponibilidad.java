@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
+import play.db.jpa.Model;
 
 import java.sql.Time;
 import java.util.Date;
@@ -16,11 +17,9 @@ import java.util.Date;
  */
 @Entity
 @NamedQuery(name="BloqueDisponibilidad.findAll", query="SELECT b FROM BloqueDisponibilidad b")
-public class BloqueDisponibilidad extends GenericModel implements Serializable {
+public class BloqueDisponibilidad extends Model implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private BloqueDisponibilidadPK id;
 
 	@Temporal(TemporalType.DATE)
 	private Date fechaFin;
@@ -43,14 +42,6 @@ public class BloqueDisponibilidad extends GenericModel implements Serializable {
 	private DisponibilidadProfesional disponibilidadprofesional;
 
 	public BloqueDisponibilidad() {
-	}
-
-	public BloqueDisponibilidadPK getId() {
-		return this.id;
-	}
-
-	public void setId(BloqueDisponibilidadPK id) {
-		this.id = id;
 	}
 
 	public Date getFechaFin() {
