@@ -1,0 +1,25 @@
+#{extends 'main.html' /}
+#{set title:'matchCirugias.html' /}
+
+<form action="@{Programacion.initProgramacion()}" method="GET">
+	<table>
+		<tr>
+    		<td><b>Cirugias</b></td>
+    		<td><b>Cirujanos</b></td>
+    	</tr>
+    	#{list items:cirugias, as:'cirugia'}
+	    	<tr>
+	    		<td>${cirugia.paciente.nombres} ${cirugia.paciente.apellidos}</td>
+	    		<td>
+	    			<select>
+	    				#{list items:cirujanos, as:'cirujano'}
+	    					<option value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}</option>
+	    				#{/list}
+					</select>
+	    		<>/td>
+	    	</tr>
+	    #{/list}
+    	
+	</table>
+	<input type="submit" value="Guardar" />
+</form>

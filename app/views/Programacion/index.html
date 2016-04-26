@@ -1,0 +1,89 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+<form action="@{Programacion.initProgramacion()}" method="GET">
+    <table>
+    	<tr>
+    		<td>Número de pacientes:</td>
+    		<td><input type="text" name="numPacientes" /></td>
+    	</tr>
+    	<tr>
+    		<td>Cirujanos:</td>
+    		<td>
+	    		#{list items:cirujanos, as:'cirujano'}
+			    	<input type="checkbox" name="cirujanos" value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}<br>
+			    #{/list}
+		    </td>
+    	</tr>
+    	<tr>
+    		<td>Anestesiologos:</td>
+    		<td>
+	    		#{list items:anestesilogos, as:'aneste'}
+			    	<input type="checkbox" name="anestesiologos" value="${aneste.idProfesionalSalud}">${aneste.nombres} ${aneste.apellidos}<br>
+			    #{/list}
+		    </td>
+    	</tr>
+    	<tr>
+    		<td>Quirofanos:</td>
+    		<td>
+	    		#{list items:quirofanos, as:'quiro'}
+			    	<input type="checkbox" name="quirofanos" value="${quiro.idQuirofano}">${quiro.nombreQuirofano}<br>
+			    #{/list}
+		    </td>
+    	</tr>
+    	<tr>
+    		<td>Fecha inicio programación:</td>
+    		<td>
+	            <div class="form-group">
+	                <div class='input-group date' id='datetimepicker1'>
+	                    <input type='text' class="form-control" />
+	                    <span class="input-group-addon">
+	                        <span class="glyphicon glyphicon-calendar"></span>
+	                    </span>
+	                </div>
+	            </div>
+		        
+		        <script type="text/javascript">
+		            $(function () {
+		                $('#datetimepicker1').datetimepicker();
+		            });
+		        </script>
+            </td>
+    	</tr>
+    	<tr>
+    		<td>Fecha fin programación:</td>
+    		<td>
+	            <div class="form-group">
+	                <div class='input-group date' id='datetimepicker2'>
+	                    <input type='text' class="form-control" />
+	                    <span class="input-group-addon">
+	                        <span class="glyphicon glyphicon-calendar"></span>
+	                    </span>
+	                </div>
+	            </div>
+		        
+		        <script type="text/javascript">
+		            $(function () {
+		                $('#datetimepicker2').datetimepicker();
+		            });
+		        </script>
+            </td>
+    	</tr>
+    	<tr>
+    		<td>Asistentes:</td>
+    		<td>
+	    		#{list items:asistentes, as:'asis'}
+			    	<input type="checkbox" name="anestesiologos" value="${asis.idProfesionalSalud}">${asis.nombres} ${asis.apellidos}<br>
+			    #{/list}
+		    </td>
+    	</tr>
+    	<tr>
+    		<td>Tiempo de procesamiento:</td>
+    		<td><input type="text" name="timeProcessing" /></td>
+    	</tr>
+    </table>
+    
+    
+    <br/>
+    <input type="submit" value="Iniciar" />
+</form> 
+
