@@ -31,6 +31,8 @@ public class Cirugia extends GenericModel implements Serializable {
 	private Timestamp inicioIncision;
 
 	private String tipocirugia;
+	
+	private String estado;
 
 	//bi-directional many-to-one association to Paciente
 	@ManyToOne
@@ -123,6 +125,14 @@ public class Cirugia extends GenericModel implements Serializable {
 
 	public void setQuirofano(Quirofano quirofano) {
 		this.quirofano = quirofano;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 	public List<CirugiaCIE> getCirugiacies() {
