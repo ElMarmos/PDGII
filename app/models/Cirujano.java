@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -20,9 +21,12 @@ public class Cirujano extends GenericModel implements Serializable {
 	private int idCirujano;
 
 	//bi-directional many-to-one association to ProfesionalSalud
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="idProfesionalSalud")
 	private ProfesionalSalud profesionalsalud;
+	
+	@OneToMany(mappedBy="cirujano")
+	private List<Solicitud> solicitudes;
 
 	public Cirujano() {
 	}
@@ -42,5 +46,26 @@ public class Cirujano extends GenericModel implements Serializable {
 	public void setProfesionalsalud(ProfesionalSalud profesionalsalud) {
 		this.profesionalsalud = profesionalsalud;
 	}
+
+	public List<Solicitud> getSolicitudes() {
+		return solicitudes;
+	}
+
+	public void setSolicitudes(List<Solicitud> solicitudes) {
+		this.solicitudes = solicitudes;
+	}
+	
+	public Solicitud addSolicitud(Solicitud solicitud){
+		getSolicitudes().add(solicitud);
+		solicitud.setCirujano(this);
+		return solicitud;
+	}
+	public Solicitud removeSolicitud(Solicitud solicitud){
+		getSolicitudes().add(solicitud);
+		solicitud.setCirujano(null);
+		return solicitud;
+	}
+	
+	
 
 }

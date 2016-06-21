@@ -37,11 +37,13 @@ public class Paciente extends GenericModel implements Serializable {
 
 	private double peso;
 
-	private int prioridad;
+	private double prioridad;
 
 	private String sexo;
 
 	private String talla;
+	
+	private String eps;
 
 	private String tipoIdentificacion;
 
@@ -67,7 +69,12 @@ public class Paciente extends GenericModel implements Serializable {
 
 	public Paciente() {
 	}
-
+	public String getEps() {
+		return eps;
+	}
+	public void setEps(String eps) {
+		this.eps = eps;
+	}
 	public int getIdPaciente() {
 		return this.idPaciente;
 	}
@@ -132,11 +139,11 @@ public class Paciente extends GenericModel implements Serializable {
 		this.peso = peso;
 	}
 
-	public int getPrioridad() {
+	public double getPrioridad() {
 		return this.prioridad;
 	}
 
-	public void setPrioridad(int prioridad) {
+	public void setPrioridad(double prioridad) {
 		this.prioridad = prioridad;
 	}
 

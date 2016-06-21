@@ -1,0 +1,75 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+<form action="@{Programacion.initProgramacion()}" method="GET">
+	
+	
+		<div class="form-group">
+			<label for="numPacientes">Número de pacientes</label>
+			<input type="text" class="form-control" id="numPacientes" name="numPacientes" placeholder="Número de pacientes">
+		</div>
+		<div class="form-group">
+			<label for="cirujanos">Cirujanos</label>
+			#{list items:cirujanos, as:'cirujano'}
+		    	<input type="checkbox" class="form-control" id="cirujanos" name="cirujanos" value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}<br>
+		    #{/list}
+		</div>
+		<div class="form-group">
+			<label for="anestesiologos">Anestesiologos</label>
+			#{list items:cirujanos, as:'cirujano'}
+		    	<input type="checkbox" class="form-control" id="anestesiologos" name="anestesiologos" value="${aneste.idProfesionalSalud}">${aneste.nombres} ${aneste.apellidos}<br>
+		    #{/list}
+		</div>
+		<div class="form-group">
+			<label for="quirofanos">Quirofanos</label>
+			#{list items:cirujanos, as:'cirujano'}
+		    	<input type="checkbox" class="form-control" id="quirofanos" name="quirofanos" value="${quiro.idQuirofano}">${quiro.nombreQuirofano}<br>
+		    #{/list}
+		</div>
+		<div class="form-group">
+			<label for="datetimepicker1">Fecha inicio programación</label>
+			<div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+	        
+	        <script type="text/javascript">
+	            $(function () {
+	                $('#datetimepicker1').datetimepicker();
+	            });
+	        </script>
+		</div>
+		<div class="form-group">
+			<label for="datetimepicker2">Fecha fin programación</label>
+			<div class="form-group">
+                <div class='input-group date' id='datetimepicker2'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+	        
+	        <script type="text/javascript">
+	            $(function () {
+	                $('#datetimepicker2').datetimepicker();
+	            });
+	        </script>
+		</div>
+		<div class="form-group">
+			<label for="asistentes">Asistentes</label>
+			#{list items:asistentes, as:'asis'}
+		    	<input type="checkbox" class="form-control" id="asistentes" name="asistentes" value="${asis.idProfesionalSalud}">${asis.nombres} ${asis.apellidos}<br>
+		    #{/list}
+		</div>
+		<div class="form-group">
+			<label for="timeProcessing">Tiempo de procesamiento</label>
+			<input type="text" class="form-control" id="timeProcessing" name="timeProcessing" placeholder="Tiempo Procesamiento">
+		</div>
+	    <br/>
+	    <button type="submit" class="btn btn-default">Iniciar</button>
+</form> 
+
