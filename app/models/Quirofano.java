@@ -32,18 +32,13 @@ public class Quirofano extends GenericModel implements Serializable {
 	@JoinColumn(name="idPabellon")
 	private Pabellon pabellon;
 
-	//bi-directional many-to-many association to Dotacion
-	@ManyToMany
-	@JoinTable(
-		name="quirofanodotacion"
-		, joinColumns={
-			@JoinColumn(name="idQuirofano")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="idDotacion")
-			}
-		)
-	private List<Dotacion> dotacions;
+	//bi-directional many-to-many association to Quirofano
+	@OneToMany(mappedBy="quirofano")
+	private List<QuirofanoDotacion> quirofanoDotaciones;
+	
+	//bi-directional many-to-many association to Quirofano
+	@OneToMany(mappedBy="quirofano")
+	private List<QuirofanoEspecialidad> quirofanoEspecialidades;
 
 	public Quirofano() {
 	}
@@ -94,12 +89,43 @@ public class Quirofano extends GenericModel implements Serializable {
 		this.pabellon = pabellon;
 	}
 
-	public List<Dotacion> getDotacions() {
-		return this.dotacions;
+	public List<QuirofanoDotacion> getQuirofanoDotaciones() {
+		return quirofanoDotaciones;
 	}
 
-	public void setDotacions(List<Dotacion> dotacions) {
-		this.dotacions = dotacions;
+	public void setQuirofanoDotaciones(List<QuirofanoDotacion> quirofanoDotaciones) {
+		this.quirofanoDotaciones = quirofanoDotaciones;
 	}
+	public QuirofanoDotacion addQuirofanoDotaciones(QuirofanoDotacion quirofanoDotacion){
+		getQuirofanoDotaciones().add(quirofanoDotacion);
+		quirofanoDotacion.setQuirofano(this);
+		return quirofanoDotacion;
+	}
+	public QuirofanoDotacion removeQuirofanoDotaciones(QuirofanoDotacion quirofanoDotacion){
+		getQuirofanoDotaciones().add(quirofanoDotacion);
+		quirofanoDotacion.setQuirofano(null);
+		return quirofanoDotacion;
+	}
+
+	public List<QuirofanoEspecialidad> getQuirofanoEspecialidades() {
+		return quirofanoEspecialidades;
+	}
+
+	public void setQuirofanoEspecialidades(
+			List<QuirofanoEspecialidad> quirofanoEspecialidades) {
+		this.quirofanoEspecialidades = quirofanoEspecialidades;
+	}
+	public QuirofanoEspecialidad addQuirofanoEspecialidades(QuirofanoEspecialidad quirofanoEspecialidad){
+		getQuirofanoEspecialidades().add(quirofanoEspecialidad);
+		quirofanoEspecialidad.setQuirofano(this);
+		return quirofanoEspecialidad;
+	}
+	public QuirofanoEspecialidad removeQuirofanoEspecialidades(QuirofanoEspecialidad quirofanoEspecialidad){
+		getQuirofanoEspecialidades().add(quirofanoEspecialidad);
+		quirofanoEspecialidad.setQuirofano(null);
+		return quirofanoEspecialidad;
+	}
+	
+		
 
 }

@@ -19,7 +19,7 @@ public class Anestesiologo extends GenericModel implements Serializable {
 	private int idAnestesiologo;
 
 	// bi-directional many-to-one association to ProfesionalSalud
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "idProfesionalSalud")
 	private ProfesionalSalud profesionalsalud;
 

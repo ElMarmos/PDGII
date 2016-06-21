@@ -22,8 +22,6 @@ public class Cirugia extends GenericModel implements Serializable {
 	@Id
 	private int idCirugia;
 
-	private double duracion;
-
 	private Timestamp fechaIngreso;
 
 	private Timestamp horaCierre;
@@ -33,6 +31,8 @@ public class Cirugia extends GenericModel implements Serializable {
 	private String tipocirugia;
 	
 	private String estado;
+	
+	private String tipoHerida;
 
 	//bi-directional many-to-one association to Paciente
 	@ManyToOne
@@ -43,6 +43,11 @@ public class Cirugia extends GenericModel implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="idQuirofano")
 	private Quirofano quirofano;
+	
+	//bi-directional many-to-one association to Quirofano
+	@ManyToOne
+	@JoinColumn(name="idProgramacion")
+	private Programacion programacion;
 
 	//bi-directional many-to-one association to CirugiaCIE
 	@OneToMany(mappedBy="cirugia")
@@ -71,12 +76,12 @@ public class Cirugia extends GenericModel implements Serializable {
 		this.idCirugia = idCirugia;
 	}
 
-	public double getDuracion() {
-		return this.duracion;
+	public String getTipoHerida() {
+		return tipoHerida;
 	}
 
-	public void setDuracion(double duracion) {
-		this.duracion = duracion;
+	public void setTipoHerida(String tipoHerida) {
+		this.tipoHerida = tipoHerida;
 	}
 
 	public Timestamp getFechaIngreso() {
@@ -222,5 +227,14 @@ public class Cirugia extends GenericModel implements Serializable {
 
 		return recursocirugia;
 	}
+
+	public Programacion getProgramacion() {
+		return programacion;
+	}
+
+	public void setProgramacion(Programacion programacion) {
+		this.programacion = programacion;
+	}
+	
 
 }

@@ -1,0 +1,101 @@
+package models;
+
+import java.io.Serializable;
+
+import javax.persistence.*;
+
+import play.db.jpa.GenericModel;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+
+/**
+ * The persistent class for the programacion database table.
+ * 
+ */
+@Entity
+@NamedQuery(name="Programacion.findAll", query="SELECT p FROM Programacion p")
+public class Programacion extends GenericModel implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private int idProgramacion;
+
+	private Timestamp fechaProgramacion;
+
+	private Timestamp fechaInicio;
+
+	private Timestamp fechaFin;
+	
+	//bi-directional many-to-one association to CirugiaProfesionalsalud
+	@OneToMany(mappedBy="programacion")
+	private List<Cirugia> programacionCirugias;
+
+	//bi-directional many-to-one association to RecursoCirugia
+	@OneToMany(mappedBy="programacion")
+	private List<Indicador> programacionIndicadores;
+	
+
+	public Programacion() {
+	}
+	
+	public int getIdProgramacion() {
+		return idProgramacion;
+	}
+	public void setIdProgramacion(int idProgramacion) {
+		this.idProgramacion = idProgramacion;
+	}
+	public Timestamp getFechaProgramacion() {
+		return fechaProgramacion;
+	}
+	public void setFechaProgramacion(Timestamp fechaProgramacion) {
+		this.fechaProgramacion = fechaProgramacion;
+	}
+	public Timestamp getFechaInicio() {
+		return fechaInicio;
+	}
+	public void setFechaInicio(Timestamp fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+	public Timestamp getFechaFin() {
+		return fechaFin;
+	}
+	public void setFechaFin(Timestamp fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+	public List<Cirugia> getProgramacionCirugias() {
+		return programacionCirugias;
+	}
+	public void setProgramacionCirugias(List<Cirugia> programacionCirugias) {
+		this.programacionCirugias = programacionCirugias;
+	}
+	public List<Indicador> getProgramacionIndicadores() {
+		return programacionIndicadores;
+	}
+	public void setProgramacionIndicadores(List<Indicador> programacionIndicadores) {
+		this.programacionIndicadores = programacionIndicadores;
+	}
+	public Cirugia addCirugia(Cirugia cirugia){
+		getProgramacionCirugias().add(cirugia);
+		cirugia.setProgramacion(this);
+		return cirugia;
+	}
+	
+	public Cirugia removeCirugia(Cirugia cirugia){
+		getProgramacionCirugias().remove(cirugia);
+		cirugia.setProgramacion(null);
+		return cirugia;
+	}
+	
+	public Indicador addIndicador(Indicador indicador){
+		getProgramacionIndicadores().add(indicador);
+		indicador.setProgramacion(this);
+		return indicador;
+	}
+	public Indicador removeIndicador(Indicador indicador){
+		getProgramacionIndicadores().remove(indicador);
+		indicador.setProgramacion(null);
+		return indicador;
+	}
+}

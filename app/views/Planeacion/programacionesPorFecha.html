@@ -1,0 +1,24 @@
+#{extends 'main.html' /}
+
+#{set title:'programacionesPorFecha.html' /}
+
+<table class="table table-hover">
+	<thead>
+		<th>Fecha Inicio</th>
+		<th>Fecha Fin</th>
+		<th>Fecha de Programación</th>
+		<th>Indicador</th>
+		<th></th>
+	</thead>
+	<tbody>
+		#{list items:programaciones, as:'programacion'}
+			<tr>
+				<td>${programacion[0].fechaInicio}</td>
+				<td>${programacion[0].fechaFin}</td>
+				<td>${(Date)programacion[0].fechaProgramacion}</td>
+				<td>${programacion[1]}</td>
+				<td><a href="@{Planeacion.programacionDetails(programacion[0].idProgramacion)}"><button type="button" class="btn btn-primary">Ver</button></a></td>
+			</tr>
+		#{/list}
+	</tbody>
+</table>

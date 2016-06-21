@@ -17,9 +17,9 @@ public class Programacion extends Controller {
     public static void index() {
     	
 		List<ProfesionalSalud> cirujanos = ProfesionalSalud.find("byProfesion", "Cirujano").fetch();
-		List<ProfesionalSalud> anestesiologos = ProfesionalSalud.find("byProfesion", "Anestesiologos").fetch();
+		List<ProfesionalSalud> anestesiologos = ProfesionalSalud.find("byProfesion", "Anestesiologo").fetch();
 		List<Quirofano> quirofanos = Quirofano.findAll();
-		List<ProfesionalSalud> asistentes = ProfesionalSalud.find("byProfesion", "Asistentes").fetch();
+		List<ProfesionalSalud> asistentes = ProfesionalSalud.find("byProfesion", "Asistente").fetch();
 
 		render(cirujanos,anestesiologos,quirofanos,asistentes);        
     }
