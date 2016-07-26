@@ -15,13 +15,13 @@
 		</div>
 		<div class="form-group">
 			<label for="anestesiologos">Anestesiologos</label>
-			#{list items:cirujanos, as:'cirujano'}
+			#{list items:anestesiologos, as:'aneste'}
 		    	<input type="checkbox" class="form-control" id="anestesiologos" name="anestesiologos" value="${aneste.idProfesionalSalud}">${aneste.nombres} ${aneste.apellidos}<br>
 		    #{/list}
 		</div>
 		<div class="form-group">
 			<label for="quirofanos">Quirofanos</label>
-			#{list items:cirujanos, as:'cirujano'}
+			#{list items:quirofanos, as:'quiro'}
 		    	<input type="checkbox" class="form-control" id="quirofanos" name="quirofanos" value="${quiro.idQuirofano}">${quiro.nombreQuirofano}<br>
 		    #{/list}
 		</div>

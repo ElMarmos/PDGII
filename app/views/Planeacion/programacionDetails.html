@@ -1,8 +1,23 @@
 #{extends 'main.html' /}
 #{set title:'programacionDetails.html' /}
-<script type="text/javascript">
-	var cirugias = ${cirugias};
-	google.charts.load('current', {'packages':['gantt']});
+<script>
+	var cirugias = [];
+</script>
+
+#{list items:cirugias, as:'cirugia'}
+	<script>
+		var surgery = new Object();
+		surgery.idCirugia = "${cirugia.idCirugia}";
+		surgery.idQuirofano = "${cirugia.quirofano.idQuirofano}";
+		surgery.nombreQuirofano = "${cirugia.quirofano.nombreQuirofano}";
+		surgery.fechaIngreso = new Date("${cirugia.fechaIngreso}");
+		surgery.horaCierre = new Date("${cirugia.horaCierre}");
+		cirugias.push(surgery);
+	</script>
+#{/list}
+<script>
+	
+	google.charts.load('current', {'packages':['timeline']});
 	google.charts.setOnLoadCallback(drawChart);
 	
 	function daysToMilliseconds(days) {
@@ -10,30 +25,23 @@
 	}
 	
 	function drawChart() {
-	
-	  var data = new google.visualization.DataTable();
-	  data.addColumn('string', 'Task ID');
-	  data.addColumn('string', 'Task Name');
-	  data.addColumn('date', 'Start Date');
-	  data.addColumn('date', 'End Date');
-	  data.addColumn('number', 'Duration');
-	  data.addColumn('number', 'Percent Complete');
-	  data.addColumn('string', 'Dependencies');
+	  var container = document.getElementById('example3.1');
+      var chart = new google.visualization.Timeline(container);
+      var dataTable = new google.visualization.DataTable();
+      
+	  dataTable.addColumn({ type: 'string', id: 'Position' });
+	  dataTable.addColumn({ type: 'string', id: 'Name' });
+      dataTable.addColumn({ type: 'date', id: 'Start' });
+      dataTable.addColumn({ type: 'date', id: 'End' });
 	 
 	  var rows = [];
-	  cirugias.forEach(new function(item){
-	  	rows.push([item.quirofano.idQuirofano, item.quirofano.nombreQuirofano, item.fechaIngreso, item.horaCierre, null, 100, null ]); 	
+	  cirugias.forEach(function(item){
+	  	rows.push([item.nombreQuirofano, item.idCirugia, item.fechaIngreso, item.horaCierre ]); 	
 	  });
 	
-	  data.addRows(rows);
-	
-	  var options = {
-	    height: 275
-	  };
-	
-	  var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
-	
-      chart.draw(data, options);
+	  dataTable.addRows(rows);
+			
+      chart.draw(dataTable);
     }
 </script>
-<div id="chart_div"></div>
+<div id="example3.1" style="height: 1000px;"></div>
