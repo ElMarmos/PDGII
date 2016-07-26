@@ -7,6 +7,7 @@ import javax.persistence.*;
 import play.db.jpa.GenericModel;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,11 +23,11 @@ public class Programacion extends GenericModel implements Serializable {
 	@Id
 	private int idProgramacion;
 
-	private Timestamp fechaProgramacion;
+	private Date fechaProgramacion;
 
-	private Timestamp fechaInicio;
+	private Date fechaInicio;
 
-	private Timestamp fechaFin;
+	private Date fechaFin;
 	
 	//bi-directional many-to-one association to CirugiaProfesionalsalud
 	@OneToMany(mappedBy="programacion")
@@ -46,19 +47,19 @@ public class Programacion extends GenericModel implements Serializable {
 	public void setIdProgramacion(int idProgramacion) {
 		this.idProgramacion = idProgramacion;
 	}
-	public Timestamp getFechaProgramacion() {
+	public Date getFechaProgramacion() {
 		return fechaProgramacion;
 	}
 	public void setFechaProgramacion(Timestamp fechaProgramacion) {
 		this.fechaProgramacion = fechaProgramacion;
 	}
-	public Timestamp getFechaInicio() {
+	public Date getFechaInicio() {
 		return fechaInicio;
 	}
 	public void setFechaInicio(Timestamp fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
-	public Timestamp getFechaFin() {
+	public Date getFechaFin() {
 		return fechaFin;
 	}
 	public void setFechaFin(Timestamp fechaFin) {

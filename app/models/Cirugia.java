@@ -7,6 +7,7 @@ import javax.persistence.*;
 import play.db.jpa.GenericModel;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,11 +23,11 @@ public class Cirugia extends GenericModel implements Serializable {
 	@Id
 	private int idCirugia;
 
-	private Timestamp fechaIngreso;
+	private Date fechaIngreso;
 
-	private Timestamp horaCierre;
+	private Date horaCierre;
 
-	private Timestamp inicioIncision;
+	private Date inicioIncision;
 
 	private String tipocirugia;
 	
@@ -84,27 +85,27 @@ public class Cirugia extends GenericModel implements Serializable {
 		this.tipoHerida = tipoHerida;
 	}
 
-	public Timestamp getFechaIngreso() {
+	public Date getFechaIngreso() {
 		return this.fechaIngreso;
 	}
 
-	public void setFechaIngreso(Timestamp fechaIngreso) {
+	public void setFechaIngreso(Date fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
 	}
 
-	public Timestamp getHoraCierre() {
+	public Date getHoraCierre() {
 		return this.horaCierre;
 	}
 
-	public void setHoraCierre(Timestamp horaCierre) {
+	public void setHoraCierre(Date horaCierre) {
 		this.horaCierre = horaCierre;
 	}
 
-	public Timestamp getInicioIncision() {
+	public Date getInicioIncision() {
 		return this.inicioIncision;
 	}
 
-	public void setInicioIncision(Timestamp inicioIncision) {
+	public void setInicioIncision(Date inicioIncision) {
 		this.inicioIncision = inicioIncision;
 	}
 
