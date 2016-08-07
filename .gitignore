@@ -29,3 +29,4 @@ $RECYCLE.BIN/
 conf/application.conf
 .project
 eclipse
+tmp
