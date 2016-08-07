@@ -34,8 +34,8 @@ public class Procedimiento extends GenericModel implements Serializable {
 	private Especialidad especialidad;
 
 	//bi-directional many-to-many association to Solicitud
-	@ManyToMany(mappedBy="procedimientos")
-	private List<Solicitud> solicituds;
+	@OneToMany(mappedBy="procedimiento")
+	private List<SolicitudProcedimientos> solicitudProcedimientos;
 
 	public Procedimiento() {
 	}
@@ -86,12 +86,26 @@ public class Procedimiento extends GenericModel implements Serializable {
 		this.especialidad = especialidad;
 	}
 
-	public List<Solicitud> getSolicituds() {
-		return this.solicituds;
+	public List<SolicitudProcedimientos> getSolicitudProcedimientos() {
+		return solicitudProcedimientos;
 	}
 
-	public void setSolicituds(List<Solicitud> solicituds) {
-		this.solicituds = solicituds;
+	public void setSolicitudProcedimientos(
+			List<SolicitudProcedimientos> solicitudProcedimientos) {
+		this.solicitudProcedimientos = solicitudProcedimientos;
 	}
+	
+	public SolicitudProcedimientos addSolicitudProcedimientos(SolicitudProcedimientos solicitudProcedimientos){
+		getSolicitudProcedimientos().add(solicitudProcedimientos);
+		solicitudProcedimientos.setProcedimiento(this);
+		return solicitudProcedimientos;
+	}
+	public SolicitudProcedimientos removeSolicitudProcedimientoes(SolicitudProcedimientos solicitudProcedimientos){
+		getSolicitudProcedimientos().add(solicitudProcedimientos);
+		solicitudProcedimientos.setProcedimiento(null);
+		return solicitudProcedimientos;
+	}
+	
+	
 
 }

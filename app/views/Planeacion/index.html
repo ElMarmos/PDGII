@@ -1,0 +1,29 @@
+#{extends 'main.html' /}
+#{set title:'Programaciones' /}
+
+<table class="table table-hover">
+	<thead>
+		<th>Fecha Inicio</th>
+		<th>Fecha Fin</th>
+		<th>Fecha de Programación</th>
+		<th>No. Programaciones</th>
+		<th></th>
+	</thead>
+	<tbody>
+		#{list items:programaciones, as:'programacion'}
+			<tr>
+				<td>${programacion[0].fechaInicio}</td>
+				<td>${programacion[0].fechaFin}</td>
+				<td>${programacion[0].fechaProgramacion}</td>
+				<td>${programacion[1]}</td>
+				<td>
+					<form action="@{Planeacion.programacionesPorFecha()}" method="POST">
+						<input type="hidden" name="dateProgramacion" value="${programacion[0].fechaProgramacion}">
+						<button type="submit" class="btn btn-primary">Ver</button>
+					</form>
+			</tr>
+		#{/list}
+		
+		
+	</tbody>
+</table>

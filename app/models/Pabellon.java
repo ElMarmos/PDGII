@@ -21,8 +21,7 @@ public class Pabellon extends GenericModel implements Serializable {
 	@Id
 	private int idPabellon;
 
-	@Column(name="` nombre`")
-	private String _nombre;
+	private String nombre;
 
 	//bi-directional many-to-one association to Quirofano
 	@OneToMany(mappedBy="pabellon")
@@ -40,11 +39,11 @@ public class Pabellon extends GenericModel implements Serializable {
 	}
 
 	public String get_nombre() {
-		return this._nombre;
+		return this.nombre;
 	}
 
 	public void set_nombre(String _nombre) {
-		this._nombre = _nombre;
+		this.nombre = _nombre;
 	}
 
 	public List<Quirofano> getQuirofanos() {

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import play.db.jpa.GenericModel;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,15 +23,17 @@ public class Cirugia extends GenericModel implements Serializable {
 	@Id
 	private int idCirugia;
 
-	private double duracion;
+	private Date fechaIngreso;
 
-	private Timestamp fechaIngreso;
+	private Date horaCierre;
 
-	private Timestamp horaCierre;
-
-	private Timestamp inicioIncision;
+	private Date inicioIncision;
 
 	private String tipocirugia;
+	
+	private String estado;
+	
+	private String tipoHerida;
 
 	//bi-directional many-to-one association to Paciente
 	@ManyToOne
@@ -41,6 +44,11 @@ public class Cirugia extends GenericModel implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="idQuirofano")
 	private Quirofano quirofano;
+	
+	//bi-directional many-to-one association to Quirofano
+	@ManyToOne
+	@JoinColumn(name="idProgramacion")
+	private Programacion programacion;
 
 	//bi-directional many-to-one association to CirugiaCIE
 	@OneToMany(mappedBy="cirugia")
@@ -69,35 +77,35 @@ public class Cirugia extends GenericModel implements Serializable {
 		this.idCirugia = idCirugia;
 	}
 
-	public double getDuracion() {
-		return this.duracion;
+	public String getTipoHerida() {
+		return tipoHerida;
 	}
 
-	public void setDuracion(double duracion) {
-		this.duracion = duracion;
+	public void setTipoHerida(String tipoHerida) {
+		this.tipoHerida = tipoHerida;
 	}
 
-	public Timestamp getFechaIngreso() {
+	public Date getFechaIngreso() {
 		return this.fechaIngreso;
 	}
 
-	public void setFechaIngreso(Timestamp fechaIngreso) {
+	public void setFechaIngreso(Date fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
 	}
 
-	public Timestamp getHoraCierre() {
+	public Date getHoraCierre() {
 		return this.horaCierre;
 	}
 
-	public void setHoraCierre(Timestamp horaCierre) {
+	public void setHoraCierre(Date horaCierre) {
 		this.horaCierre = horaCierre;
 	}
 
-	public Timestamp getInicioIncision() {
+	public Date getInicioIncision() {
 		return this.inicioIncision;
 	}
 
-	public void setInicioIncision(Timestamp inicioIncision) {
+	public void setInicioIncision(Date inicioIncision) {
 		this.inicioIncision = inicioIncision;
 	}
 
@@ -123,6 +131,14 @@ public class Cirugia extends GenericModel implements Serializable {
 
 	public void setQuirofano(Quirofano quirofano) {
 		this.quirofano = quirofano;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 	public List<CirugiaCIE> getCirugiacies() {
@@ -212,5 +228,14 @@ public class Cirugia extends GenericModel implements Serializable {
 
 		return recursocirugia;
 	}
+
+	public Programacion getProgramacion() {
+		return programacion;
+	}
+
+	public void setProgramacion(Programacion programacion) {
+		this.programacion = programacion;
+	}
+	
 
 }

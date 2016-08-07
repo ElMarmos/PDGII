@@ -24,8 +24,8 @@ public class Dotacion extends GenericModel implements Serializable {
 	private String nombre;
 
 	//bi-directional many-to-many association to Quirofano
-	@ManyToMany(mappedBy="dotacions")
-	private List<Quirofano> quirofanos;
+	@OneToMany(mappedBy="dotacion")
+	private List<QuirofanoDotacion> quirofanoDotaciones;
 
 	public Dotacion() {
 	}
@@ -46,12 +46,22 @@ public class Dotacion extends GenericModel implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public List<Quirofano> getQuirofanos() {
-		return this.quirofanos;
+	public List<QuirofanoDotacion> getQuirofanoDotaciones() {
+		return quirofanoDotaciones;
 	}
 
-	public void setQuirofanos(List<Quirofano> quirofanos) {
-		this.quirofanos = quirofanos;
+	public void setQuirofanoDotaciones(List<QuirofanoDotacion> quirofanoDotaciones) {
+		this.quirofanoDotaciones = quirofanoDotaciones;
 	}
-
+	public QuirofanoDotacion addQuirofanoDotaciones(QuirofanoDotacion quirofanoDotacion){
+		getQuirofanoDotaciones().add(quirofanoDotacion);
+		quirofanoDotacion.setDotacion(this);
+		return quirofanoDotacion;
+	}
+	public QuirofanoDotacion removeQuirofanoDotaciones(QuirofanoDotacion quirofanoDotacion){
+		getQuirofanoDotaciones().add(quirofanoDotacion);
+		quirofanoDotacion.setDotacion(null);
+		return quirofanoDotacion;
+	}
+	
 }

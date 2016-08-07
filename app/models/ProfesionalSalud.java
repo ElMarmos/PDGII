@@ -30,17 +30,9 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 	@Lob
 	private String profesion;
 
-	// bi-directional many-to-one association to Anestesiologo
-	@OneToMany(mappedBy = "profesionalsalud")
-	private List<Anestesiologo> anestesiologos;
-
 	// bi-directional many-to-one association to CirugiaProfesionalsalud
 	@OneToMany(mappedBy = "profesionalsalud")
 	private List<CirugiaProfesionalSalud> cirugiaprofesionalsaluds;
-
-	// bi-directional many-to-one association to Cirujano
-	@OneToMany(mappedBy = "profesionalsalud")
-	private List<Cirujano> cirujanos;
 
 	// bi-directional many-to-one association to DisponibilidadProfesional
 	@OneToMany(mappedBy = "profesionalsalud")
@@ -93,27 +85,7 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 		this.profesion = profesion;
 	}
 
-	public List<Anestesiologo> getAnestesiologos() {
-		return this.anestesiologos;
-	}
-
-	public void setAnestesiologos(List<Anestesiologo> anestesiologos) {
-		this.anestesiologos = anestesiologos;
-	}
-
-	public Anestesiologo addAnestesiologo(Anestesiologo anestesiologo) {
-		getAnestesiologos().add(anestesiologo);
-		anestesiologo.setProfesionalsalud(this);
-
-		return anestesiologo;
-	}
-
-	public Anestesiologo removeAnestesiologo(Anestesiologo anestesiologo) {
-		getAnestesiologos().remove(anestesiologo);
-		anestesiologo.setProfesionalsalud(null);
-
-		return anestesiologo;
-	}
+	
 
 	public List<CirugiaProfesionalSalud> getCirugiaprofesionalsaluds() {
 		return this.cirugiaprofesionalsaluds;
@@ -138,28 +110,6 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 		cirugiaprofesionalsalud.setProfesionalsalud(null);
 
 		return cirugiaprofesionalsalud;
-	}
-
-	public List<Cirujano> getCirujanos() {
-		return this.cirujanos;
-	}
-
-	public void setCirujanos(List<Cirujano> cirujanos) {
-		this.cirujanos = cirujanos;
-	}
-
-	public Cirujano addCirujano(Cirujano cirujano) {
-		getCirujanos().add(cirujano);
-		cirujano.setProfesionalsalud(this);
-
-		return cirujano;
-	}
-
-	public Cirujano removeCirujano(Cirujano cirujano) {
-		getCirujanos().remove(cirujano);
-		cirujano.setProfesionalsalud(null);
-
-		return cirujano;
 	}
 
 	public List<DisponibilidadProfesional> getDisponibilidadprofesionals() {

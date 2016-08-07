@@ -39,18 +39,16 @@ public class Solicitud extends GenericModel implements Serializable {
 	@JoinColumn(name="idPaciente")
 	private Paciente paciente;
 
-	//bi-directional many-to-many association to Procedimiento
-	@ManyToMany
-	@JoinTable(
-		name="solicitudprocedimiento"
-		, joinColumns={
-			@JoinColumn(name="idSolicitud")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="codigoProcedimiento")
-			}
-		)
-	private List<Procedimiento> procedimientos;
+	@ManyToOne
+	@JoinColumn(name="idCirujano")
+	private Cirujano cirujano;
+	
+	
+	//bi-directional many-to-many association to SolicitudProcedimientos
+	@OneToMany(mappedBy="solicitud")
+	private List<SolicitudProcedimientos> solicitudProcedimientos;
+	
+	
 
 	public Solicitud() {
 	}
@@ -119,12 +117,36 @@ public class Solicitud extends GenericModel implements Serializable {
 		this.paciente = paciente;
 	}
 
-	public List<Procedimiento> getProcedimientos() {
-		return this.procedimientos;
+	public List<SolicitudProcedimientos> getSolicitudProcedimientos() {
+		return solicitudProcedimientos;
 	}
 
-	public void setProcedimientos(List<Procedimiento> procedimientos) {
-		this.procedimientos = procedimientos;
+	public void setSolicitudProcedimientos(
+			List<SolicitudProcedimientos> solicitudProcedimientos) {
+		this.solicitudProcedimientos = solicitudProcedimientos;
 	}
+	
+	public SolicitudProcedimientos addSolicitudProcedimientos(SolicitudProcedimientos solicitudProcedimientos){
+		getSolicitudProcedimientos().add(solicitudProcedimientos);
+		solicitudProcedimientos.setSolicitud(this);
+		return solicitudProcedimientos;
+	}
+	public SolicitudProcedimientos removeSolicitudProcedimientoes(SolicitudProcedimientos solicitudProcedimientos){
+		getSolicitudProcedimientos().add(solicitudProcedimientos);
+		solicitudProcedimientos.setSolicitud(null);
+		return solicitudProcedimientos;
+	}
+
+	public Cirujano getCirujano() {
+		return cirujano;
+	}
+
+	public void setCirujano(Cirujano cirujano) {
+		this.cirujano = cirujano;
+	}
+	
+	
+
+	
 
 }
