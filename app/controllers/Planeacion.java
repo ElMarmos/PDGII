@@ -15,11 +15,6 @@ import javax.persistence.Query;
 
 import org.apache.log4j.helpers.QuietWriter;
 import org.h2.constant.SysProperties;
-import org.json.JSONArray;
-
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
