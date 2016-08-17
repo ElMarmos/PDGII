@@ -2,3 +2,4 @@
 
 require:
     - play
+    - org.apache.poi -> poi-ooxml 3.13
