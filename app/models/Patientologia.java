@@ -14,9 +14,13 @@ import play.db.jpa.Model;
  */
 @Entity
 @NamedQuery(name="Patientologia.findAll", query="SELECT p FROM Patientologia p")
-public class Patientologia extends Model implements Serializable {
+public class Patientologia extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idPatientologia;
+	
 	private String nombre;
 
 	//bi-directional many-to-one association to Paciente
@@ -30,6 +34,14 @@ public class Patientologia extends Model implements Serializable {
 	private Patologia patologia;
 
 	public Patientologia() {
+	}
+
+	public int getIdPatientologia() {
+		return idPatientologia;
+	}
+
+	public void setIdPatientologia(int idPatientologia) {
+		this.idPatientologia = idPatientologia;
 	}
 
 	public String getNombre() {

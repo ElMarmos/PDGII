@@ -17,10 +17,13 @@ import java.util.Date;
  */
 @Entity
 @NamedQuery(name="BloqueDisponibilidad.findAll", query="SELECT b FROM BloqueDisponibilidad b")
-public class BloqueDisponibilidad extends Model implements Serializable {
+public class BloqueDisponibilidad extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idBloqueDisponibilidad;
+	
 	@Temporal(TemporalType.DATE)
 	private Date fechaFin;
 
@@ -44,6 +47,12 @@ public class BloqueDisponibilidad extends Model implements Serializable {
 	public BloqueDisponibilidad() {
 	}
 
+	public int getIdBloqueDisponibilidad() {
+		return idBloqueDisponibilidad;
+	}
+	public void setIdBloqueDisponibilidad(int idBloqueDisponibilidad) {
+		this.idBloqueDisponibilidad = idBloqueDisponibilidad;
+	}
 	public Date getFechaFin() {
 		return this.fechaFin;
 	}

@@ -21,6 +21,7 @@ public class BloqueQuirurgico extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idBloqueQuirurgico;
 
 	private byte habilitado;

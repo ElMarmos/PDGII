@@ -14,9 +14,13 @@ import play.db.jpa.Model;
  */
 @Entity
 @NamedQuery(name="RecursoCirugia.findAll", query="SELECT r FROM RecursoCirugia r")
-public class RecursoCirugia extends Model implements Serializable {
+public class RecursoCirugia extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idRecursoCirugia;
+	
 	private int cantidad;
 
 	//bi-directional many-to-one association to Cirugia
@@ -34,6 +38,15 @@ public class RecursoCirugia extends Model implements Serializable {
 
 	public int getCantidad() {
 		return this.cantidad;
+	}
+	
+
+	public int getIdRecursoCirugia() {
+		return idRecursoCirugia;
+	}
+
+	public void setIdRecursoCirugia(int idRecursoCirugia) {
+		this.idRecursoCirugia = idRecursoCirugia;
 	}
 
 	public void setCantidad(int cantidad) {

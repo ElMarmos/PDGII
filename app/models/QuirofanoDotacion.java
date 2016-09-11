@@ -16,8 +16,12 @@ import java.sql.Time;
  */
 @Entity
 @NamedQuery(name="QuirofanoDotacion.findAll", query="SELECT q FROM QuirofanoDotacion q")
-public class QuirofanoDotacion extends Model implements Serializable {
+public class QuirofanoDotacion extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idQuirofanoDotacion;
 	
 	
 	//bi-directional many-to-one association to Quirofano
@@ -31,6 +35,14 @@ public class QuirofanoDotacion extends Model implements Serializable {
 	private Dotacion dotacion;
 
 	public QuirofanoDotacion() {
+	}
+
+	public int getIdQuirofanoDotacion() {
+		return idQuirofanoDotacion;
+	}
+
+	public void setIdQuirofanoDotacion(int idQuirofanoDotacion) {
+		this.idQuirofanoDotacion = idQuirofanoDotacion;
 	}
 
 	public Quirofano getQuirofano() {
