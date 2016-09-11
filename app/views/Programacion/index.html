@@ -1,73 +1,67 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
-<form action="@{Programacion.initProgramacion()}" method="GET">
+<form action="@{Programacion.initProgramacion()}" method="POST">
 	
 	
 		<div class="form-group">
 			<label for="numPacientes">Número de pacientes</label>
-			<input type="text" class="form-control" id="numPacientes" name="numPacientes" placeholder="Número de pacientes">
+			<input type="number" class="form-control" id="numPacientes" name="numPacientes" placeholder="Número de pacientes">
 		</div>
-		<div class="form-group">
-			<label for="cirujanos">Cirujanos</label>
+		<label for="cirujanos">Cirujanos</label>
+		<div style="width: 600px; height: 400px; overflow-y: scroll;" class="form-group">
 			#{list items:cirujanos, as:'cirujano'}
-		    	<input type="checkbox" class="form-control" id="cirujanos" name="cirujanos" value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}<br>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="cirujanos" value="${cirujano.idProfesionalSalud}" > ${cirujano.nombres} ${cirujano.apellidos}
+					</label>
+				</div>
 		    #{/list}
 		</div>
-		<div class="form-group">
-			<label for="anestesiologos">Anestesiologos</label>
+		<label for="quirofanos">Anestesiologos</label>
+		<div style="width: 600px; height: 400px; overflow-y: scroll;" class="form-group">
 			#{list items:anestesiologos, as:'aneste'}
-		    	<input type="checkbox" class="form-control" id="anestesiologos" name="anestesiologos" value="${aneste.idProfesionalSalud}">${aneste.nombres} ${aneste.apellidos}<br>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="anestesiologos" value="${aneste.idProfesionalSalud}" > ${aneste.nombres} ${aneste.apellidos}
+					</label>
+				</div>
 		    #{/list}
 		</div>
-		<div class="form-group">
-			<label for="quirofanos">Quirofanos</label>
+		<label for="quirofanos">Quirofanos</label>
+		<div style="width: 600px; height: 400px; overflow-y: scroll;" class="form-group">
 			#{list items:quirofanos, as:'quiro'}
-		    	<input type="checkbox" class="form-control" id="quirofanos" name="quirofanos" value="${quiro.idQuirofano}">${quiro.nombreQuirofano}<br>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="quirofanos" value="${quiro.idQuirofano}" > ${quiro.nombreQuirofano}
+					</label>
+				</div>
 		    #{/list}
 		</div>
 		<div class="form-group">
 			<label for="datetimepicker1">Fecha inicio programación</label>
 			<div class="form-group">
-                <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+                <input type="date" name="dateBegin" class="form-control">
             </div>
-	        
-	        <script type="text/javascript">
-	            $(function () {
-	                $('#datetimepicker1').datetimepicker();
-	            });
-	        </script>
 		</div>
 		<div class="form-group">
 			<label for="datetimepicker2">Fecha fin programación</label>
 			<div class="form-group">
-                <div class='input-group date' id='datetimepicker2'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+                <input type="date" name="dateEnd" class="form-control">
             </div>
-	        
-	        <script type="text/javascript">
-	            $(function () {
-	                $('#datetimepicker2').datetimepicker();
-	            });
-	        </script>
 		</div>
-		<div class="form-group">
-			<label for="asistentes">Asistentes</label>
+		<label for="asistentes">Asistentes</label>
+		<div style="width: 600px; height: 400px; overflow-y: scroll;" class="form-group">
 			#{list items:asistentes, as:'asis'}
-		    	<input type="checkbox" class="form-control" id="asistentes" name="asistentes" value="${asis.idProfesionalSalud}">${asis.nombres} ${asis.apellidos}<br>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="asistentes" value="${asis.idProfesionalSalud}" > ${asis.nombres} ${asis.apellidos}
+					</label>
+				</div>
 		    #{/list}
 		</div>
 		<div class="form-group">
-			<label for="timeProcessing">Tiempo de procesamiento</label>
-			<input type="text" class="form-control" id="timeProcessing" name="timeProcessing" placeholder="Tiempo Procesamiento">
+			<label for="timeProcessing">Tiempo de procesamiento (Minutos)</label>
+			<input type="number" class="form-control" id="timeProcessing" name="timeProcessing" placeholder="Tiempo Procesamiento">
 		</div>
 	    <br/>
 	    <button type="submit" class="btn btn-default">Iniciar</button>

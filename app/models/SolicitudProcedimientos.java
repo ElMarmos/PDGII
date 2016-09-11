@@ -16,9 +16,12 @@ import java.sql.Time;
  */
 @Entity
 @NamedQuery(name="SolicitudProcedimientos.findAll", query="SELECT s FROM SolicitudProcedimientos s")
-public class SolicitudProcedimientos extends Model implements Serializable {
+public class SolicitudProcedimientos extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idSolicitudProcedimiento;
 	
 	//bi-directional many-to-one association to Quirofano
 	@ManyToOne
@@ -31,6 +34,14 @@ public class SolicitudProcedimientos extends Model implements Serializable {
 	private Procedimiento procedimiento;
 
 	public SolicitudProcedimientos() {
+	}
+	
+	public int getIdSolicitudProcedimiento() {
+		return idSolicitudProcedimiento;
+	}
+
+	public void setIdSolicitudProcedimiento(int idSolicitudProcedimiento) {
+		this.idSolicitudProcedimiento = idSolicitudProcedimiento;
 	}
 
 	public Solicitud getSolicitud() {

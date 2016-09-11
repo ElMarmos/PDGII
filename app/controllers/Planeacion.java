@@ -28,10 +28,11 @@ import play.mvc.Controller;
 public class Planeacion extends Controller {
 	
 	 public static void index() {
-		 Query query = JPA.em().createQuery("SELECT p, COUNT(p.fechaProgramacion) as numProgramacion FROM "
+		 List<models.Planeacion> planeaciones = models.Planeacion.find("order by fechaProgramacion desc").fetch();
+		 /* Query query = JPA.em().createQuery("SELECT p, COUNT(p.fechaProgramacion) as numProgramacion FROM "
 		 		+ "Programacion p GROUP BY p.fechaProgramacion");
-		 List<Object[]> programaciones = query.getResultList();
-		 render(programaciones);
+		 List<Object[]> programaciones = query.getResultList(); */
+		 render(planeaciones);
 	 }
 	 
 	 public static void programacionesPorFecha (String dateProgramacion){
@@ -45,6 +46,20 @@ public class Planeacion extends Controller {
 			List<Object[]> programaciones = query.getResultList();
 			render(programaciones);
 		 } catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+	 }
+	 
+	 public static void programacionesPorPlaneacion (int idPlaneacion){
+		 try {
+			Query query = JPA.em().createQuery("SELECT p, AVG(i.valor) as avgindicador FROM "
+			 		+ "Programacion p LEFT JOIN p.programacionIndicadores i WHERE p.planeacion.idPlaneacion = :idPlaneacion GROUP BY p.idProgramacion ORDER BY avgindicador DESC");
+			query.setParameter("idPlaneacion", idPlaneacion);
+			List<Object[]> programaciones = query.getResultList();
+			render(programaciones);
+		 } catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

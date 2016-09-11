@@ -21,6 +21,7 @@ public class Programacion extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idProgramacion;
 
 	private Date fechaProgramacion;
@@ -28,6 +29,11 @@ public class Programacion extends GenericModel implements Serializable {
 	private Date fechaInicio;
 
 	private Date fechaFin;
+	
+	//bi-directional many-to-one association to Paciente
+	@ManyToOne
+	@JoinColumn(name="idPlaneacion")
+	private Planeacion planeacion;
 	
 	//bi-directional many-to-one association to CirugiaProfesionalsalud
 	@OneToMany(mappedBy="programacion")
@@ -50,21 +56,30 @@ public class Programacion extends GenericModel implements Serializable {
 	public Date getFechaProgramacion() {
 		return fechaProgramacion;
 	}
-	public void setFechaProgramacion(Timestamp fechaProgramacion) {
+	public void setFechaProgramacion(Date fechaProgramacion) {
 		this.fechaProgramacion = fechaProgramacion;
 	}
 	public Date getFechaInicio() {
 		return fechaInicio;
 	}
-	public void setFechaInicio(Timestamp fechaInicio) {
+	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 	public Date getFechaFin() {
 		return fechaFin;
 	}
-	public void setFechaFin(Timestamp fechaFin) {
+	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
 	}
+	
+	public Planeacion getPlaneacion() {
+		return planeacion;
+	}
+
+	public void setPlaneacion(Planeacion planeacion) {
+		this.planeacion = planeacion;
+	}
+
 	public List<Cirugia> getProgramacionCirugias() {
 		return programacionCirugias;
 	}

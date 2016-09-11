@@ -19,6 +19,7 @@ public class Quirofano extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idQuirofano;
 
 	private String nombreQuirofano;
@@ -39,6 +40,10 @@ public class Quirofano extends GenericModel implements Serializable {
 	//bi-directional many-to-many association to Quirofano
 	@OneToMany(mappedBy="quirofano")
 	private List<QuirofanoEspecialidad> quirofanoEspecialidades;
+	
+	//bi-directional many-to-one association to CamaPaciente
+	@OneToMany(mappedBy="quirofano")
+	private List<PlaneacionQuirofanos> planeacionesQuirofanos;
 
 	public Quirofano() {
 	}
@@ -124,6 +129,26 @@ public class Quirofano extends GenericModel implements Serializable {
 		getQuirofanoEspecialidades().add(quirofanoEspecialidad);
 		quirofanoEspecialidad.setQuirofano(null);
 		return quirofanoEspecialidad;
+	}
+	
+	public List<PlaneacionQuirofanos> getPlaneacionesQuirofanos() {
+		return planeacionesQuirofanos;
+	}
+
+	public void setPlaneacionesQuirofanos(
+			List<PlaneacionQuirofanos> planeacionesQuirofanos) {
+		this.planeacionesQuirofanos = planeacionesQuirofanos;
+	}
+	public PlaneacionQuirofanos addPlaneacionQuirofano(PlaneacionQuirofanos planeacionQuirofanos){
+		getPlaneacionesQuirofanos().add(planeacionQuirofanos);
+		planeacionQuirofanos.setQuirofano(this);
+		return planeacionQuirofanos;
+	}
+	
+	public PlaneacionQuirofanos removePlaneacionQuirofano(PlaneacionQuirofanos planeacionQuirofanos){
+		getPlaneacionesQuirofanos().remove(planeacionQuirofanos);
+		planeacionQuirofanos.setQuirofano(null);
+		return planeacionQuirofanos;
 	}
 	
 		
