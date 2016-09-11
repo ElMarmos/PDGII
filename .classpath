@@ -5,6 +5,11 @@
 	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="D:\Play\framework\play-1.2.5.3.jar" sourcepath="D:/play/framework/src" />
+	<classpathentry kind="lib" path="D:\GitHub\PDGII\lib\poi-3.13.jar"/>
+	<classpathentry kind="lib" path="D:\GitHub\PDGII\lib\poi-ooxml-3.13.jar" sourcepath="C:\Users\Alejandro\.ivy2\cache\org.apache.poi\poi-ooxml\sources\poi-ooxml-3.13-sources.jar"/>
+	<classpathentry kind="lib" path="D:\GitHub\PDGII\lib\poi-ooxml-schemas-3.13.jar"/>
+	<classpathentry kind="lib" path="D:\GitHub\PDGII\lib\stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="D:\GitHub\PDGII\lib\xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="D:\Play\framework\lib\activation-1.1.1.jar"/>
 	<classpathentry kind="lib" path="D:\Play\framework\lib\antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="D:\Play\framework\lib\asm-all-3.3.1.jar"/>
