@@ -33,6 +33,8 @@ public class BloqueDisponibilidad extends GenericModel implements Serializable {
 	private Time horaFin;
 
 	private Time horaInicio;
+	
+	private String dias;
 
 	//bi-directional many-to-one association to BloqueQuirurgico
 	@ManyToOne
@@ -99,6 +101,14 @@ public class BloqueDisponibilidad extends GenericModel implements Serializable {
 
 	public void setDisponibilidadprofesional(DisponibilidadProfesional disponibilidadprofesional) {
 		this.disponibilidadprofesional = disponibilidadprofesional;
+	}
+	
+	public String getDias() {
+		return dias;
+	}
+
+	public void setDias(String dias) {
+		this.dias = dias;
 	}
 
 }
