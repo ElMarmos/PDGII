@@ -10,6 +10,7 @@
 		surgery.idCirugia = "${cirugia.idCirugia}";
 		surgery.idQuirofano = "${cirugia.quirofano.idQuirofano}";
 		surgery.nombreQuirofano = "${cirugia.quirofano.nombreQuirofano}";
+		surgery.nombrePaciente = "${cirugia.paciente.nombres}";
 		surgery.fechaIngreso = new Date("${cirugia.fechaIngreso}");
 		surgery.horaCierre = new Date("${cirugia.horaCierre}");
 		cirugias.push(surgery);
@@ -25,7 +26,7 @@
 	}
 	
 	function drawChart() {
-	  var container = document.getElementById('example3.1');
+	  var container = document.getElementById('ganttChart');
       var chart = new google.visualization.Timeline(container);
       var dataTable = new google.visualization.DataTable();
       
@@ -43,5 +44,96 @@
 			
       chart.draw(dataTable);
     }
+    
+    var todayDate = moment().startOf('day');
+	var YM = todayDate.format('YYYY-MM');
+	var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
+	var TODAY = todayDate.format('YYYY-MM-DD');
+	var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
+	
+    $(document).ready(function(){
+    	var surgeries = [];
+		var quirofanoSelected = $("#quirofano").val();
+    	cirugias.forEach(function(item){
+    		if(item.nombreQuirofano == quirofanoSelected){
+    			surgeries.push({
+			  		title: item.nombrePaciente,
+					start: moment(item.fechaIngreso).format(),
+					end: moment(item.horaCierre).format()
+			  	});
+    		}	
+		  });
+    
+    
+    	$('#bookingChart').fullCalendar({
+        	header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'agendaWeek,month'
+			},
+			events: surgeries
+    	});
+    });
 </script>
-<div id="example3.1" style="height: 1000px;"></div>
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#gantt">Gantt</a></li>
+  <li><a data-toggle="tab" href="#barras">Barras</a></li>
+  <li><a data-toggle="tab" href="#booking" id="bookingTab" onclick="updateBooking();">Booking</a></li>
+  <li><a data-toggle="tab" href="#tablas">Tablas</a></li>
+</ul>
+<br/>
+<div class="tab-content">
+  <div id="gantt" class="tab-pane fade in active">
+  	<div id="ganttChart" style="height: 1000px;"></div>
+  </div>
+  <div id="barras" class="tab-pane fade">
+    <h3>Menu 1</h3>
+    <p>Some content in menu 1.</p>
+  </div>
+  <div id="booking" class="tab-pane fade">
+  	<form class="form-inline">
+	  <div class="form-group">
+	    <label for="exampleInputName2">Quirofano</label>
+	    <select class="form-control" id="quirofano" onchange="updateBooking();">
+	    	#{list items:quirofanos, as:'quirofano'}
+	    		<option>${quirofano.nombreQuirofano}</option>
+	    	#{/list}
+		</select>
+		<br/>
+		<div id="bookingChart" style="display: table;"></div>
+	  </div>
+	  <br/>
+	  
+	</form>
+  </div>
+  <div id="tablas" class="tab-pane fade">
+    <h3>Menu 2</h3>
+    <p>Some content in menu 2.</p>
+  </div>
+</div>
+
+<script type="text/javascript">
+	function updateBooking(){
+		var surgeries = [];
+		var quirofanoSelected = $("#quirofano").val();
+    	cirugias.forEach(function(item){
+    		if(item.nombreQuirofano == quirofanoSelected){
+    			surgeries.push({
+			  		title: item.nombrePaciente,
+					start: moment(item.fechaIngreso).format(),
+					end: moment(item.horaCierre).format()
+			  	});
+    		}	
+		  });
+    
+    
+
+    	$('#bookingChart').fullCalendar('removeEvents');
+		$('#bookingChart').fullCalendar('addEventSource', surgeries);         
+		$('#bookingChart').fullCalendar('rerenderEvents' );
+	}
+	
+</script>
+
+<button type="button" class="btn btn-primary">Comparar</button>
+

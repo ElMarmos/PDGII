@@ -22,6 +22,7 @@ import models.Cirugia;
 import models.Indicador;
 import models.ProfesionalSalud;
 import models.Programacion;
+import models.Quirofano;
 import play.db.jpa.JPA;
 import play.mvc.Controller;
 
@@ -67,37 +68,15 @@ public class Planeacion extends Controller {
 	 }
 	 
 	 public static void programacionDetails(String idProgramacion){
-		 
 		 Programacion programacion = Programacion.findById(Integer.parseInt(idProgramacion));
-		 List<Cirugia> cirugias = Cirugia.find("byProgramacion", programacion ).fetch();
-		 render(cirugias);
-		 
-		 /**try{
-			 Programacion programacion = Programacion.findById(Integer.parseInt(idProgramacion));
-			 
-			 System.out.println(dcirugias.size());
-			 System.out.println(dcirugias.get(0).getIdCirugia());
-			 JSONObject cirugias = new JSONObject();
-			 JSONArray arrSurge = new JSONArray();
-			 for (Cirugia cirugia : dcirugias) {
-				JSONObject surgery = new JSONObject();
-				surgery.put("idQuirofano", cirugia.getQuirofano().getIdQuirofano());
-				surgery.put("nombreQuirofano", cirugia.getQuirofano().getNombreQuirofano());
-				surgery.put("fechaIngreso", cirugia.getFechaIngreso());
-				surgery.put("horaCierre", cirugia.getHoraCierre());
-				arrSurge.put(surgery);
-			 }
-			 cirugias.put("cirugias", arrSurge);
-			 System.out.println(cirugias.toString());
-			 render(cirugias);
-		 }catch(JSONException je){
-			 String error = je.getMessage();
-			 render(error);
-		 }catch(Exception e){
-			 String error = e.getMessage();
-			 render(error);
-		 }
-		 */
+		 List<Cirugia> cirugias = Cirugia.find("byProgramacion", programacion).fetch();
+		 List<Quirofano> quirofanos = new ArrayList<Quirofano>();
+		 for (Cirugia cirugia : cirugias) {
+			if(!quirofanos.contains(cirugia.getQuirofano())){
+				quirofanos.add(cirugia.getQuirofano());
+			}
+		}
+		 render(cirugias,quirofanos);
 	 }
 	 
 	 
