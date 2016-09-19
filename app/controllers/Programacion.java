@@ -17,6 +17,7 @@ import models.ProfesionalSalud;
 import models.Quirofano;
 import play.db.jpa.JPA;
 import play.mvc.*;
+import play.mvc.results.RenderTemplate;
 
 public class Programacion extends Controller {
 
@@ -85,11 +86,12 @@ public class Programacion extends Controller {
 				planeacionProfesionales.setRol("Asistente");
 				planeacionProfesionales.save();
 			}
-	    	
+	    	redirect("/");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	
     }
     
     public static void matchCirugias(){
