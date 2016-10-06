@@ -1,0 +1,184 @@
+#{extends 'main.html' /}
+#{set title:'compareProgramacion.html' /}
+
+<div class="row">
+  <div class="form-group">
+    <label for="indicadores">Indicadores</label>
+   	<select id="indicadores" name="indicadores" multiple="" class="form-control">
+   	<option value="0" selected="">Todos</option>
+   		#{list items:programacion.programacionIndicadores, as:'indicador'}
+   			<option value="${indicador.idIndicador}">${indicador.nombre}</option>
+   		#{/list}
+   	</select>
+  </div>
+  <div class="form-group">
+    <label for="programaciones">Programaciones</label>
+    <select id="programaciones" name="programaciones" multiple="" class="form-control">
+    	<option value="0" selected="">Todas</option>
+   		#{list items:programacion.planeacion.planeacionProgramaciones, as:'programa'}
+   			#{if programa.idProgramacion != programacion.idProgramacion}
+   				<option value="${programa.idProgramacion}">Programación ${programa.idProgramacion}</option>
+   			#{/if}
+   		#{/list}
+   	</select>
+  </div>
+  <button type="submit" class="btn btn-default">Filtrar</button>
+</div>
+<br/>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#barras">Barras</a></li>
+  <li><a data-toggle="tab" href="#telarana">Telarañas</a></li>
+  <li><a data-toggle="tab" href="#lineal" id="bookingTab">Lineal</a></li>
+</ul>
+<div class="tab-content">
+  <div id="barras" class="tab-pane fade in active">
+  	<div class="col-xs-12">
+  		<canvas id="barChart"></canvas>
+  	</div>
+  </div>
+  <div id="telarana" class="tab-pane fade">
+  	<div class="col-xs-12">
+  		<canvas id="telaranaChart"></canvas>
+  	</div>
+  </div>
+  <div id="lineal" class="tab-pane fade">
+  	<div class="col-xs-12">
+  		<canvas id="linealChart"></canvas>
+  	</div>
+  </div>
+</div>
+
+<script type="text/javascript">
+	var indicadores = [];
+	var data = new Object();
+	data.labels = [];
+	data.datasets = [];
+	var dataset = new Object();
+	var indicador = new Object();
+	var tupla = new Object;
+
+  var randomScalingFactor = function() {
+      return Math.round(Math.random() * 100);
+      //return 0;
+  };
+  var randomColorFactor = function() {
+      return Math.round(Math.random() * 255);
+  };
+  var randomColor = function(opacity) {
+      return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
+  };
+
+	#{list items:programacion.planeacion.planeacionProgramaciones, as:'progra'}
+		dataset = new Object();
+		dataset.label = "${progra.idProgramacion}";
+		dataset.data = [];
+
+    #{list items:progra.programacionIndicadores, as:'indi'}
+      dataset.data.push(${indi.valor})
+    #{/list}
+    dataset.backgroundColor =  randomColor(0.4);
+    dataset.pointBackgroundColor =  randomColor(0.4);
+		data.datasets.push(dataset);
+	#{/list}
+
+  #{list items:programacion.programacionIndicadores, as:'indicador'}
+      data.labels.push("${indicador.nombre}");
+  #{/list}
+
+
+
+	$.each(indicadores, function(index, indi){
+		$.each(indi.valores, function(i, tupla){
+			data.datasets[i].data.push(tupla.val);
+		});
+	});
+
+	window.onload = function() {
+		var ctx = document.getElementById("barChart").getContext("2d");
+		window.myBar = Chart.Bar(ctx, {
+            data: data, 
+            options: {
+                responsive: true,
+                hoverMode: 'label',
+                hoverAnimationDuration: 400,
+                stacked: false,
+                title:{
+                    display:true,
+                    text:"Diagrama Comparativo de Barras"
+                },
+                scales: {
+                    yAxes: [{
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "left",
+                        id: "y-axis-1",
+                    }, {
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "right",
+                        id: "y-axis-2",
+                        gridLines: {
+                            drawOnChartArea: false
+                        }
+                    }],
+                }
+            }
+        });
+        var ctx = document.getElementById("linealChart").getContext("2d");
+        window.myLine = Chart.Line(ctx, {
+                data: data, 
+                options: {
+                    responsive: true,
+                    hoverMode: 'label',
+                    hoverAnimationDuration: 400,
+                    stacked: false,
+                    title:{
+                        display:true,
+                        text:"Diagrama Comparativo de Barras"
+                    },
+                    scales: {
+                        yAxes: [{
+                            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                            display: true,
+                            position: "left",
+                            id: "y-axis-1",
+                        }, {
+                            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                            display: true,
+                            position: "right",
+                            id: "y-axis-2",
+                            gridLines: {
+                                drawOnChartArea: false
+                            }
+                        }],
+                    }
+                }
+            });
+
+        var ctx = document.getElementById("telaranaChart");
+        window.myRadar = new Chart(ctx, {
+                type : 'radar',
+                data: data, 
+                options: {
+                    responsive : true,
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Chart.js Radar Chart'
+                    },
+                    
+                }
+            });
+	};
+
+</script>
+
+
+
+<script type="text/javascript">
+
+	
+</script>

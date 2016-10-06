@@ -47,9 +47,9 @@ public class Planeacion extends Controller {
 			List<Object[]> programaciones = query.getResultList();
 			render(programaciones);
 		 } catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	 }
 	 
@@ -69,15 +69,21 @@ public class Planeacion extends Controller {
 	 
 	 public static void programacionDetails(String idProgramacion){
 		 Programacion programacion = Programacion.findById(Integer.parseInt(idProgramacion));
-		 List<Cirugia> cirugias = Cirugia.find("byProgramacion", programacion).fetch();
+		 List<Programacion> programaciones = Programacion.find("byPlaneacion", programacion.getPlaneacion()).fetch();
+		 //List<Programacion> programaciones = programacion.getPlaneacion().getPlaneacionProgramaciones();
+		 
+		 List<Cirugia> cirugias = Cirugia.find("programacion = ? order by quirofano", programacion).fetch();
 		 List<Quirofano> quirofanos = new ArrayList<Quirofano>();
 		 for (Cirugia cirugia : cirugias) {
 			if(!quirofanos.contains(cirugia.getQuirofano())){
 				quirofanos.add(cirugia.getQuirofano());
 			}
 		}
-		 render(cirugias,quirofanos);
+		 render(cirugias,quirofanos, programacion, programaciones);
 	 }
 	 
-	 
+	 public static void compareProgramacion(int idProgramacion){
+		 Programacion programacion = Programacion.findById(idProgramacion);
+		 render (programacion);
+	 }
 }
