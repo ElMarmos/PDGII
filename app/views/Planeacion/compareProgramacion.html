@@ -11,18 +11,7 @@
    		#{/list}
    	</select>
   </div>
-  <div class="form-group">
-    <label for="programaciones">Programaciones</label>
-    <select id="programaciones" name="programaciones" multiple="" class="form-control">
-    	<option value="0" selected="">Todas</option>
-   		#{list items:programacion.planeacion.planeacionProgramaciones, as:'programa'}
-   			#{if programa.idProgramacion != programacion.idProgramacion}
-   				<option value="${programa.idProgramacion}">Programación ${programa.idProgramacion}</option>
-   			#{/if}
-   		#{/list}
-   	</select>
-  </div>
-  <button type="submit" class="btn btn-default">Filtrar</button>
+  <button type="button" class="btn btn-default" id="filtrar">Filtrar</button>
 </div>
 <br/>
 
@@ -50,13 +39,16 @@
 </div>
 
 <script type="text/javascript">
-	var indicadores = [];
 	var data = new Object();
 	data.labels = [];
 	data.datasets = [];
 	var dataset = new Object();
-	var indicador = new Object();
 	var tupla = new Object;
+
+  
+  var infoSet = [];
+  var indicators = [];
+
 
   var randomScalingFactor = function() {
       return Math.round(Math.random() * 100);
@@ -71,12 +63,16 @@
 
 	#{list items:programacion.planeacion.planeacionProgramaciones, as:'progra'}
 		dataset = new Object();
-		dataset.label = "${progra.idProgramacion}";
+		dataset.label = "Programación ${progra.idProgramacion}";
 		dataset.data = [];
-
+    var info = new Object();
+    info.progra = "${progra.idProgramacion}";
+    info.data = [];
     #{list items:progra.programacionIndicadores, as:'indi'}
-      dataset.data.push(${indi.valor})
+      info.data.push({ indicador : "${indi.idIndicador}", valor : ${indi.valor} });
+      dataset.data.push(${indi.valor});
     #{/list}
+    infoSet.push(info);
     dataset.backgroundColor =  randomColor(0.4);
     dataset.pointBackgroundColor =  randomColor(0.4);
 		data.datasets.push(dataset);
@@ -84,15 +80,8 @@
 
   #{list items:programacion.programacionIndicadores, as:'indicador'}
       data.labels.push("${indicador.nombre}");
+      indicators.push({ nombre : "${indicador.nombre}", id: ${indicador.idIndicador}})
   #{/list}
-
-
-
-	$.each(indicadores, function(index, indi){
-		$.each(indi.valores, function(i, tupla){
-			data.datasets[i].data.push(tupla.val);
-		});
-	});
 
 	window.onload = function() {
 		var ctx = document.getElementById("barChart").getContext("2d");
@@ -174,11 +163,43 @@
             });
 	};
 
-</script>
+  $("#filtrar").click(function(){
+      var indicadores = $("#indicadores").val();
+      var data = new Object();
+      data.labels = [];
+      data.datasets = [];
+      var dataset = new Object();
+
+      $.each(infoSet, function(i, row){
+        dataset = new Object();
+        dataset.label = "Programación " + row.progra;
+        dataset.data = [];
+        $.each(row.data, function(j, indi){
+          if($.inArray(indi.indicador+"", indicadores) > -1){
+            dataset.data.push(indi.valor);
+          }
+        });
+        dataset.backgroundColor =  randomColor(0.4);
+        dataset.pointBackgroundColor =  randomColor(0.4);
+        data.datasets.push(dataset);
+      });
+
+      $.each(indicators, function(i, indicador){
+        if($.inArray(indicador.id+"", indicadores) > -1){
+          data.labels.push(indicador.nombre);
+        }
+      });
+
+      window.myBar.data = data;
+      window.myBar.update();
+
+      window.myLine.data = data;
+      window.myLine.update();
+
+      window.myRadar.data = data;
+      window.myBar.update();
 
 
+  });
 
-<script type="text/javascript">
-
-	
 </script>
