@@ -7,11 +7,12 @@
    	<select id="indicadores" name="indicadores" multiple="" class="form-control">
    	<option value="0" selected="">Todos</option>
    		#{list items:programacion.programacionIndicadores, as:'indicador'}
-   			<option value="${indicador.idIndicador}">${indicador.nombre}</option>
+   			<option value="${indicador.nombre}">${indicador.nombre}</option>
    		#{/list}
    	</select>
   </div>
   <button type="button" class="btn btn-default" id="filtrar">Filtrar</button>
+  <a href="@{Planeacion.programacionDetails(programacion.idProgramacion)}" class="btn btn-default">Volver</a>
 </div>
 <br/>
 
@@ -36,56 +37,57 @@
   		<canvas id="linealChart"></canvas>
   	</div>
   </div>
+  <br/><br/>
 </div>
 
 <script type="text/javascript">
-	var data = new Object();
-	data.labels = [];
-	data.datasets = [];
-	var dataset = new Object();
-	var tupla = new Object;
+  $(document).ready(function(){
+    var data = new Object();
+    data.labels = [];
+    data.datasets = [];
+    var dataset = new Object();
+    var tupla = new Object;
 
-  
-  var infoSet = [];
-  var indicators = [];
+    
+    var infoSet = [];
+    var indicators = [];
 
 
-  var randomScalingFactor = function() {
-      return Math.round(Math.random() * 100);
-      //return 0;
-  };
-  var randomColorFactor = function() {
-      return Math.round(Math.random() * 255);
-  };
-  var randomColor = function(opacity) {
-      return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
-  };
+    var randomScalingFactor = function() {
+        return Math.round(Math.random() * 100);
+        //return 0;
+    };
+    var randomColorFactor = function() {
+        return Math.round(Math.random() * 255);
+    };
+    var randomColor = function(opacity) {
+        return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
+    };
 
-	#{list items:programacion.planeacion.planeacionProgramaciones, as:'progra'}
-		dataset = new Object();
-		dataset.label = "Programación ${progra.idProgramacion}";
-		dataset.data = [];
-    var info = new Object();
-    info.progra = "${progra.idProgramacion}";
-    info.data = [];
-    #{list items:progra.programacionIndicadores, as:'indi'}
-      info.data.push({ indicador : "${indi.idIndicador}", valor : ${indi.valor} });
-      dataset.data.push(${indi.valor});
+    #{list items:programacion.planeacion.planeacionProgramaciones, as:'progra'}
+      dataset = new Object();
+      dataset.label = "Programación ${progra.idProgramacion}";
+      dataset.data = [];
+      var info = new Object();
+      info.progra = "${progra.idProgramacion}";
+      info.data = [];
+      #{list items:progra.programacionIndicadores, as:'indi'}
+        info.data.push({ indicador : "${indi.nombre}", valor : ${indi.valor} });
+        dataset.data.push(${indi.valor});
+      #{/list}
+      infoSet.push(info);
+      dataset.backgroundColor =  randomColor(0.4);
+      dataset.pointBackgroundColor =  randomColor(0.4);
+      data.datasets.push(dataset);
     #{/list}
-    infoSet.push(info);
-    dataset.backgroundColor =  randomColor(0.4);
-    dataset.pointBackgroundColor =  randomColor(0.4);
-		data.datasets.push(dataset);
-	#{/list}
 
-  #{list items:programacion.programacionIndicadores, as:'indicador'}
-      data.labels.push("${indicador.nombre}");
-      indicators.push({ nombre : "${indicador.nombre}", id: ${indicador.idIndicador}})
-  #{/list}
+    #{list items:programacion.programacionIndicadores, as:'indicador'}
+        data.labels.push("${indicador.nombre}");
+        indicators.push({ nombre : "${indicador.nombre}", id: ${indicador.idIndicador}})
+    #{/list}
 
-	window.onload = function() {
-		var ctx = document.getElementById("barChart").getContext("2d");
-		window.myBar = Chart.Bar(ctx, {
+    var ctxBar = document.getElementById("barChart").getContext("2d");
+    var myBar = Chart.Bar(ctxBar, {
             data: data, 
             options: {
                 responsive: true,
@@ -98,24 +100,19 @@
                 },
                 scales: {
                     yAxes: [{
+                      ticks: {
+                                min: 0
+                            },
                         type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
                         display: true,
                         position: "left",
                         id: "y-axis-1",
-                    }, {
-                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                        display: true,
-                        position: "right",
-                        id: "y-axis-2",
-                        gridLines: {
-                            drawOnChartArea: false
-                        }
                     }],
                 }
             }
         });
-        var ctx = document.getElementById("linealChart").getContext("2d");
-        window.myLine = Chart.Line(ctx, {
+        var ctxLine = document.getElementById("linealChart").getContext("2d");
+        var myLine = Chart.Line(ctxLine, {
                 data: data, 
                 options: {
                     responsive: true,
@@ -128,25 +125,21 @@
                     },
                     scales: {
                         yAxes: [{
+                          ticks: {
+                                min: 0
+                            },
+                            beginAtZero:false,
                             type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
                             display: true,
                             position: "left",
                             id: "y-axis-1",
-                        }, {
-                            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                            display: true,
-                            position: "right",
-                            id: "y-axis-2",
-                            gridLines: {
-                                drawOnChartArea: false
-                            }
                         }],
                     }
                 }
             });
 
-        var ctx = document.getElementById("telaranaChart");
-        window.myRadar = new Chart(ctx, {
+        var ctxRadar = document.getElementById("telaranaChart");
+        var myRadar = new Chart(ctxRadar, {
                 type : 'radar',
                 data: data, 
                 options: {
@@ -161,45 +154,119 @@
                     
                 }
             });
-	};
+       $("#filtrar").click(function(){
+          var indicadores = $("#indicadores").val();
+          var data = new Object();
+          data.labels = [];
+          data.datasets = [];
+          var dataset = new Object();
 
-  $("#filtrar").click(function(){
-      var indicadores = $("#indicadores").val();
-      var data = new Object();
-      data.labels = [];
-      data.datasets = [];
-      var dataset = new Object();
+          $.each(infoSet, function(i, row){
+            dataset = new Object();
+            dataset.label = "Programación " + row.progra;
+            dataset.data = [];
+            $.each(row.data, function(j, indi){
 
-      $.each(infoSet, function(i, row){
-        dataset = new Object();
-        dataset.label = "Programación " + row.progra;
-        dataset.data = [];
-        $.each(row.data, function(j, indi){
-          if($.inArray(indi.indicador+"", indicadores) > -1){
-            dataset.data.push(indi.valor);
-          }
-        });
-        dataset.backgroundColor =  randomColor(0.4);
-        dataset.pointBackgroundColor =  randomColor(0.4);
-        data.datasets.push(dataset);
-      });
+              if($.inArray("0", indicadores) > -1){
+                dataset.data.push(indi.valor);
+              }else{
+                var condition = $.inArray(indi.indicador, indicadores);
+                if(condition > -1){
+                  dataset.data.push(indi.valor);
+                }
+              }
+             
+            });
+            dataset.backgroundColor =  randomColor(0.4);
+            dataset.pointBackgroundColor =  randomColor(0.4);
+            data.datasets.push(dataset);
+          });
 
-      $.each(indicators, function(i, indicador){
-        if($.inArray(indicador.id+"", indicadores) > -1){
-          data.labels.push(indicador.nombre);
-        }
-      });
+          $.each(indicators, function(i, indicador){
+            if($.inArray("0", indicadores) > -1){
+              data.labels.push(indicador.nombre);
+            }else{
+              var condition = $.inArray(indicador.nombre, indicadores);
+              if( condition > -1){
+                data.labels.push(indicador.nombre);
+              }
+            }            
+          });
 
-      window.myBar.data = data;
-      window.myBar.update();
+          myBar.destroy();
+          myBar = Chart.Bar(ctxBar, {
+              data: data, 
+              options: {
+                  responsive: true,
+                  hoverMode: 'label',
+                  hoverAnimationDuration: 400,
+                  stacked: false,
+                  title:{
+                      display:true,
+                      text:"Diagrama Comparativo de Barras"
+                  },
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                                min: 0
+                          },
+                          type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                          display: true,
+                          position: "left",
+                          id: "y-axis-1",
+                      }],
+                  }
+              }
+          });
 
-      window.myLine.data = data;
-      window.myLine.update();
 
-      window.myRadar.data = data;
-      window.myBar.update();
+          myLine.destroy();
+          myLine = Chart.Line(ctxLine, {
+                data: data, 
+                options: {
+                    responsive: true,
+                    hoverMode: 'label',
+                    hoverAnimationDuration: 400,
+                    stacked: false,
+                    title:{
+                        display:true,
+                        text:"Diagrama Comparativo de Barras"
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0
+                            },
+                            beginAtZero:false,
+                            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                            display: true,
+                            position: "left",
+                            id: "y-axis-1",
+                        }],
+                        xAxes : [{beginAtZero:false}]
+                    }
+                }
+            });
 
-
+          myRadar.destroy();
+          myRadar = new Chart(ctxRadar, {
+                type : 'radar',
+                data: data, 
+                options: {
+                    responsive : true,
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Chart.js Radar Chart'
+                    },
+                    
+                }
+            });
+      });  
   });
+
+  
 
 </script>

@@ -18,6 +18,7 @@
 	<script type="text/javascript" src="http://momentjs.com/downloads/moment.min.js"></script>
 	<script src="@{'/public/javascripts/gcal.js'}"></script>
 	<script src="@{'/public/javascripts/dhtmlxscheduler.js'}"></script>
+	<script src="@{'/public/javascripts/dhtmlxscheduler_serialize.js'}"></script>
 </head>
 <body>
 
@@ -53,7 +54,14 @@
 		</div><!-- /.container-fluid -->
 	</nav>
 
+	
 	<div class="container">
+		<div class="alert alert-success" id="successAlert" style="display:none;">
+		  <p id="successMessage"></p>
+		</div>
+		<div class="alert alert-error" id="errorAlert" style="display:none;">
+		  <p id="errorMessage"></p>
+		</div>
 		#{doLayout /}
 	</div>
 

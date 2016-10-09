@@ -3,3 +3,4 @@
 require:
     - play
     - org.apache.poi -> poi-ooxml 3.13
+    - org.json -> json 20160810

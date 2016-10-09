@@ -5,11 +5,23 @@
 	var events = [];
 </script>
 
-<ul class="nav nav-tabs">
+#{if cirugias.size > 0}
+
+
+<div class="row">
+	<div class="col-md-12">
+		
+	</div>
+</div>
+<ul class="nav nav-tabs" id="tabscharts">
   <li class="active"><a data-toggle="tab" href="#gantt">Gantt</a></li>
   <li><a data-toggle="tab" href="#barras" onclick="initBarChart();">Barras</a></li>
   <li><a data-toggle="tab" href="#booking" id="bookingTab" onclick="initBooking();">Booking</a></li>
   <li><a data-toggle="tab" href="#tablas">Tablas</a></li>
+  #{if programacion.principal == true }
+	<li class="pull-right"><span class="glyphicon glyphicon-star" aria-hidden="true" style="color: green; font-size: 43px;"></span></li>
+  #{/if}
+  
 </ul>
 <br/>
 <div class="tab-content">
@@ -26,37 +38,47 @@
 	  </div>
 	  <br/>
 	</form>
-  	<div id="ganttChart"></div>
+  	<div id="ganttChart" ></div>
   </div>
   <div id="barras" class="tab-pane fade">
     <div id="barChart" ></div>
   </div>
   <div id="booking" class="tab-pane fade">
-  	<form class="form-inline">
-	  <div class="form-group">
-	    <label for="quirofano">Quirofano</label>
-	    <select class="form-control" id="quirofano" onchange="updateBooking();">
-	    	#{list items:quirofanos, as:'quirofano'}
-	    		<option>${quirofano.nombreQuirofano}</option>
-	    	#{/list}
-		</select>
-		<br/>
+	  <div class="row">
+	  	<div class="col-md-12">
+	  		<form class="form-inline">
+			  <div class="form-group">
+			    <label for="quirofano">Quirofano</label>
+			    <select class="form-control" id="quirofano" onchange="updateBooking();">
+			    	#{list items:quirofanos, as:'quirofano'}
+			    		<option>${quirofano.nombreQuirofano}</option>
+			    	#{/list}
+				</select>
+				<br/>
+				<br/>
+			  </div>
+			  <br/>
+			</form>
+	  	</div>	
 	  </div>
-	  <br/>
-	</form>
-	<div id="scheduler_here" class="dhx_cal_container" style="width:100%; height:600px; padding:10px;">
-	    <div class="dhx_cal_navline">
-	        <div class="dhx_cal_prev_button">&nbsp;</div>
-	        <div class="dhx_cal_next_button">&nbsp;</div>
-	        <div class="dhx_cal_today_button"></div>
-	        <div class="dhx_cal_date"></div>
-	        <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-	        <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-	        <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
-	    </div>
-	    <div class="dhx_cal_header"></div>
-	    <div class="dhx_cal_data"></div>       
-	</div>
+	  <div class="row">
+	  	<div class="col-md-12">
+	  		<div id="scheduler_here" class="dhx_cal_container" style="width:100%; height:600px; padding:10px;">
+			    <div class="dhx_cal_navline">
+			        <div class="dhx_cal_prev_button">&nbsp;</div>
+			        <div class="dhx_cal_next_button">&nbsp;</div>
+			        <div class="dhx_cal_today_button"></div>
+			        <div class="dhx_cal_date"></div>
+			        <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+			        <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+			        <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+			    </div>
+			    <div class="dhx_cal_header"></div>
+			    <div class="dhx_cal_data"></div>       
+			</div>
+	  	</div>
+	  	
+	  </div>
   </div>
   <div id="tablas" class="tab-pane fade">
   	<table class="table">
@@ -97,48 +119,19 @@
   </div>
 </div>
 
+
+
 <a href="@{Planeacion.compareProgramacion(programacion.idProgramacion)}"><button type="button" class="btn btn-primary">Comparar</button></a>
+<button type="button" onclick="serializeScheduler();" class="btn btn-primary">Guardar</button>
+#{if programacion.principal == false }
+	<button type="button" onclick="establecerProgramacion();" class="btn btn-primary" id="establecer">Establecer Programación Principal</button>
+#{/if}
 <a href="@{Planeacion.programacionesPorPlaneacion(programacion.planeacion.idPlaneacion)}"><button type="button" class="btn btn-default">Volver</button></a>
-<div id="modal-compare" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Comparar Programaciones</h4>
-      </div>
-      <form id="formCompare" action="@{Planeacion.compareProgramacion()}">
-	      <div class="modal-body">
-			  <div class="form-group">
-			    <label for="indicadores">Indicadores</label>
-			   	<select id="indicadores" name="indicadores" multiple="" class="form-control">
-			   		#{list items:programacion.programacionIndicadores, as:'indicador'}
-			   			<option value="${indicador.idIndicador}">${indicador.nombre}</option>
-			   		#{/list}
-			   	</select>
-			  </div>
-			  <div class="form-group">
-			    <label for="programaciones">Programaciones</label>
-			    <select id="programaciones" name="programaciones" multiple="" class="form-control">
-			   		#{list items:programaciones, as:'programa'}
-			   			#{if programa.idProgramacion != programacion.idProgramacion}
-			   				<option value="${programa.idProgramacion}">Programación ${programa.idProgramacion}</option>
-			   			#{/if}
-			   		#{/list}
-			   	</select>
-			  </div>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary">Comparar</button>
-	      </div>
-      </form>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div>
 <script>
 	
 	$(document).ready(function(){
 		initGanttChart();
-	})
+	});
 
 
 	/** Gantt Chart */ 
@@ -206,8 +199,11 @@
 	/** Bar Chart */
 
 	function initBarChart(){
-		google.charts.load('current', {'packages':['timeline']});
-		google.charts.setOnLoadCallback(drawBarChart);
+		setTimeout(function (){
+			google.charts.load('current', {'packages':['timeline']});
+			google.charts.setOnLoadCallback(drawBarChart);
+		},200);
+		
 	}
 
 	
@@ -233,11 +229,13 @@
 
     /** Booking Chart */
 	function initBooking() {
-		scheduler.config.multi_day = true;
+		setTimeout(function (){
+			scheduler.config.multi_day = true;
+			scheduler.config.xml_date="%Y-%m-%d %H:%i";
+			scheduler.init('scheduler_here',new Date(),"week");
+			updateBooking();
+		},200);
 		
-		scheduler.config.xml_date="%Y-%m-%d %H:%i";
-		scheduler.init('scheduler_here',new Date(),"week");
-		updateBooking();
 		
 	}
 	
@@ -259,6 +257,56 @@
 		scheduler.parse(jsonevents, "json");
 	}
 
+	function serializeScheduler(){
+
+		var json = scheduler.toJSON();
+
+		$.ajax({
+			url : '@{Planeacion.modificarCirugia}',
+			type : "POST",
+			data : {
+				json : json
+			},
+			success : function(data){
+				
+				var successMessage = $("#successMessage");
+				successMessage.empty();
+				successMessage.append(data);
+				$("#successAlert").css("display", "block");
+				
+			}
+		}).fail(function() {
+			var errorMessage = $("#successError");
+			errorMessage.empty();
+			errorMessage.append(data);
+			$("#errorAlert").css("display", "block");
+		});
+	}
+
+	function establecerProgramacion(){
+		$.ajax({
+			url : '@{Planeacion.establecerProgramacionPrincipal}',
+			type : "POST",
+			data : {
+				idProgramacion : "${programacion.idProgramacion}"
+			},
+			success : function(data){
+				var successMessage = $("#successMessage");
+				successMessage.empty();
+				successMessage.append(data);
+				$("#successAlert").css("display", "block");
+				$("#tabscharts").append('<li class="pull-right"><span class="glyphicon glyphicon-star" aria-hidden="true" style="color: green; font-size: 43px;"></span></li>');
+				$("#establecer").css("display", "none");
+			}
+		}).fail(function() {
+			var errorMessage = $("#successError");
+			errorMessage.empty();
+			errorMessage.append(data);
+			$("#errorAlert").css("display", "block");
+		});
+	}
+
+
 	function show_minical(){
 		if (scheduler.isCalendarVisible())
 			scheduler.destroyCalendar();
@@ -279,3 +327,13 @@
     /* Table Chart */
 
 </script>
+#{/if}
+#{else}
+
+<br/><br/>
+<h3>No hay Cirugias asociadas a esta programación<h3/>
+<br/><br/>
+<a href="@{Planeacion.programacionesPorPlaneacion(programacion.planeacion.idPlaneacion)}"><button type="button" class="btn btn-default">Volver</button></a>
+<br/><br/>
+#{/else}
+
