@@ -30,6 +30,8 @@ public class Programacion extends GenericModel implements Serializable {
 
 	private Date fechaFin;
 	
+	private boolean principal;
+	
 	//bi-directional many-to-one association to Paciente
 	@ManyToOne
 	@JoinColumn(name="idPlaneacion")
@@ -72,6 +74,14 @@ public class Programacion extends GenericModel implements Serializable {
 		this.fechaFin = fechaFin;
 	}
 	
+	public boolean isPrincipal() {
+		return principal;
+	}
+
+	public void setPrincipal(boolean principal) {
+		this.principal = principal;
+	}
+
 	public Planeacion getPlaneacion() {
 		return planeacion;
 	}

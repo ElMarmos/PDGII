@@ -10,11 +10,13 @@ import java.util.List;
 import javax.persistence.Query;
 
 import models.Cirugia;
+import models.Cirujano;
 import models.Planeacion;
 import models.PlaneacionProfesionales;
 import models.PlaneacionQuirofanos;
 import models.ProfesionalSalud;
 import models.Quirofano;
+import models.Solicitud;
 import play.db.jpa.JPA;
 import play.mvc.*;
 import play.mvc.results.RenderTemplate;
@@ -95,10 +97,32 @@ public class Programacion extends Controller {
     }
     
     public static void matchCirugias(){
-    	Query query = JPA.em().createQuery("select c from Cirugia c where (select count(*) from CirugiaProfesionalSalud cp where cp.cirugia = c and cp.rol = 'Cirujano') = 0 and c.estado = 'Solicitada'");
-        List<Cirugia> cirugias = query.getResultList();
+    	Query query = JPA.em().createQuery("select s from Solicitud s where s.cirujano is null or s.cirujano.idCirujano = 0");
+    	List<Solicitud> solicitudes = query.getResultList();
+    	
         List<ProfesionalSalud> cirujanos = ProfesionalSalud.find("byProfesion", "Cirujano").fetch();
-        render(cirugias, cirujanos);
+        render(solicitudes, cirujanos);
+    }
+    
+    public static void saveMatchSurgeries(){
+    	Query query = JPA.em().createQuery("select s from Solicitud s where s.cirujano is null or s.cirujano.idCirujano = 0");
+    	List<Solicitud> solicitudes = query.getResultList();
+    	for (Solicitud solicitud : solicitudes) {
+			if(params._contains(solicitud.getIdSolicitud()+"")){
+				try{
+					int idProfesional = Integer.parseInt(params.get(solicitud.getIdSolicitud()+""));
+					if(idProfesional != 0){
+						Cirujano cirujano = Cirujano.find("select c from Cirujano c where c.profesionalsalud.idProfesionalSalud = ?", idProfesional).first();
+						solicitud.setCirujano(cirujano);
+						solicitud.save();
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				
+			}
+		}
+    	redirect("/");
     }
 
 }

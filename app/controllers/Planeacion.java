@@ -15,6 +15,8 @@ import javax.persistence.Query;
 
 import org.apache.log4j.helpers.QuietWriter;
 import org.h2.constant.SysProperties;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
@@ -47,9 +49,9 @@ public class Planeacion extends Controller {
 			List<Object[]> programaciones = query.getResultList();
 			render(programaciones);
 		 } catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	 }
 	 
@@ -69,15 +71,70 @@ public class Planeacion extends Controller {
 	 
 	 public static void programacionDetails(String idProgramacion){
 		 Programacion programacion = Programacion.findById(Integer.parseInt(idProgramacion));
-		 List<Cirugia> cirugias = Cirugia.find("byProgramacion", programacion).fetch();
+		 List<Programacion> programaciones = Programacion.find("byPlaneacion", programacion.getPlaneacion()).fetch();
+		 //List<Programacion> programaciones = programacion.getPlaneacion().getPlaneacionProgramaciones();
+		 
+		 List<Cirugia> cirugias = Cirugia.find("programacion = ? order by quirofano", programacion).fetch();
 		 List<Quirofano> quirofanos = new ArrayList<Quirofano>();
 		 for (Cirugia cirugia : cirugias) {
 			if(!quirofanos.contains(cirugia.getQuirofano())){
 				quirofanos.add(cirugia.getQuirofano());
 			}
 		}
-		 render(cirugias,quirofanos);
+		 render(cirugias,quirofanos, programacion, programaciones);
 	 }
 	 
+	 public static void compareProgramacion(int idProgramacion){
+		 Programacion programacion = Programacion.findById(idProgramacion);
+		 render (programacion);
+	 }
 	 
+	 public static String modificarCirugia(String json){
+		 
+		 String message = "";
+		 try {
+			 JSONArray cirugias = new JSONArray(json);
+			 for(int i = 0; i < cirugias.length(); i++){
+				 JSONObject cirugiajson = cirugias.getJSONObject(i);
+				 Cirugia cirugia = Cirugia.findById(cirugiajson.getInt("id"));
+				 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+				 
+		        String initDate = cirugiajson.getString("start_date");
+		        String endDate = cirugiajson.getString("end_date");
+		        
+		        	
+		            Date dateStart = formatter.parse(initDate);
+		            Date dateEnd = formatter.parse(endDate);
+		            cirugia.setFechaIngreso(dateStart);
+		            cirugia.setHoraCierre(dateEnd);
+		            cirugia.save();
+			 }
+			 message = "Se realizo la modificación exitosamente";
+		 } catch (ParseException e) {
+            e.printStackTrace();
+            message = "Ocurrio un error al hacer la modificación";
+		 }
+		 
+		 return message;
+	 }
+	 
+	 public static String establecerProgramacionPrincipal(int idProgramacion){
+		 Programacion programacion = Programacion.findById(idProgramacion);
+		 
+		 try{
+			 for (Programacion pro : programacion.getPlaneacion().getPlaneacionProgramaciones()) {
+				if(pro.getIdProgramacion() == idProgramacion){
+					pro.setPrincipal(true);
+					pro.save();
+				}else{
+					pro.setPrincipal(false);
+					pro.save();
+				}
+			}
+			 return "Se establecio la programación exitosamente";
+		 }catch(Exception  e){
+			 e.printStackTrace();
+		 }
+		 return "Error al establecer la programación com principal";
+	 }
 }
