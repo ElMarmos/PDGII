@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -29,7 +30,9 @@ public class Cirujano extends GenericModel implements Serializable {
 	@OneToMany(mappedBy="cirujano")
 	private List<Solicitud> solicitudes;
 
-	public Cirujano() {
+	public Cirujano(ProfesionalSalud profesionalSalud) {
+		this.profesionalsalud = profesionalSalud;
+		solicitudes = new ArrayList<>();
 	}
 
 	public int getIdCirujano() {

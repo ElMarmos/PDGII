@@ -7,6 +7,7 @@ import javax.persistence.*;
 import play.db.jpa.GenericModel;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,13 +33,13 @@ public class BloqueQuirurgico extends GenericModel implements Serializable {
 
 	private String nombreBloque;
 	
+	private String dias;
+	
 	@Temporal(TemporalType.DATE)
 	private Date fechaFin;
 
 	@Temporal(TemporalType.DATE)
 	private Date fechaInicio;
-	
-	private String dias;
 
 	//bi-directional many-to-one association to BloqueDisponibilidad
 	@OneToMany(mappedBy="bloquequirurgico")
@@ -49,7 +50,16 @@ public class BloqueQuirurgico extends GenericModel implements Serializable {
 	@JoinColumn(name="idEspecialidad")
 	private Especialidad especialidad;
 
-	public BloqueQuirurgico() {
+	public BloqueQuirurgico(String nombreBloque, Especialidad especialidad, Date fechaInicio, Timestamp horaInicio, Date fechaFin, Timestamp horaFin, String dias) {
+		this.nombreBloque = nombreBloque;
+		this.especialidad = especialidad;
+		this.fechaInicio = fechaInicio;
+		this.fechaFin = fechaFin;
+		this.horaInicio = horaInicio;
+		this.horaFinal = horaFin;
+		this.dias = dias;
+		
+		this.bloquedisponibilidads = new ArrayList<BloqueDisponibilidad>();
 	}
 
 	public int getIdBloqueQuirurgico() {
@@ -137,12 +147,8 @@ public class BloqueQuirurgico extends GenericModel implements Serializable {
 	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
+	
+	
+	
 
-	public String getDias() {
-		return dias;
-	}
-
-	public void setDias(String dias) {
-		this.dias = dias;
-	}
 }

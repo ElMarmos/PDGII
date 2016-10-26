@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,36 +48,15 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 	@OneToMany(mappedBy="profesionalSalud")
 	private List<PlaneacionProfesionales> planeacionesProfesionales;
 
-	public ProfesionalSalud() {
-	}
-	
-	public boolean hasEspecialidad(Solicitud solicitud){
-		if(solicitud != null && solicitud.getSolicitudProcedimientos() != null){
-			for(SolicitudProcedimientos soliProcedimientos: solicitud.getSolicitudProcedimientos()){
-				if(profesionalsaludespecialidads != null){
-					for (ProfesionalSaludEspecialidad profeEspecialidad : profesionalsaludespecialidads) {
-						if(profeEspecialidad.getEspecialidad().getNombreEspecialidad().equals(soliProcedimientos.getProcedimiento().getEspecialidad().getNombreEspecialidad())){
-							return true;
-						}
-					}
-				}
-			}
-		}
-		
-		return false;
-		
-	}
-	
-	public boolean hasEspecialidad(String especialidad){
-		if(profesionalsaludespecialidads != null){
-			for (ProfesionalSaludEspecialidad profeEspecialidad : profesionalsaludespecialidads) {
-				if(profeEspecialidad.getEspecialidad().getNombreEspecialidad().equals(especialidad)){
-					return true;
-				}
-			}
-		}
-		
-		return false;
+	public ProfesionalSalud(String nombres, String apellidos, String profesion, String contrato) {
+		this.nombres = nombres;
+		this.apellidos = apellidos;
+		this.profesion = profesion;
+		this.contrato = contrato;
+		this.cirugiaprofesionalsaluds = new ArrayList<>();
+		this.disponibilidadprofesionals = new ArrayList<>();
+		this.profesionalsaludespecialidads = new ArrayList<>();
+		this.planeacionesProfesionales = new ArrayList<>();
 	}
 
 	public int getIdProfesionalSalud() {

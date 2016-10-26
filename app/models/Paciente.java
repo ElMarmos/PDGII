@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -68,8 +69,31 @@ public class Paciente extends GenericModel implements Serializable {
 	@OneToMany(mappedBy="paciente")
 	private List<Solicitud> solicituds;
 
-	public Paciente() {
+	public Paciente(){
+		
 	}
+	
+	public Paciente(String nombres, String apellidos, String tipoIdent, String numeroIdentificacion, Date fechaNacimiento, String sexo, double peso, String talla, double prioridad, String ciudadProcedencia, String eps, String numeroHistoria){
+		this.nombres = nombres;
+		this.apellidos = apellidos;
+		this.tipoIdentificacion = tipoIdent;
+		this.numeroIdentificacion = numeroIdentificacion;
+		this.fechaNacimiento = fechaNacimiento;
+		this.sexo = sexo;
+		this.peso = peso;
+		this.talla = talla;
+		this.prioridad = prioridad;
+		this.ciudadPrecediencia = ciudadProcedencia;
+		this.eps = eps;
+		this.numeroHistoriaClinica = numeroHistoria;
+		
+		patientologias = new ArrayList<>();
+		camapacientes = new ArrayList<>();
+		cirugias = new ArrayList<>();
+		seguimientos = new ArrayList<>();
+		solicituds = new ArrayList<>();
+	}
+	
 	public String getEps() {
 		return eps;
 	}
