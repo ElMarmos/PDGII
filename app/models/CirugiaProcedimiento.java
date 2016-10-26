@@ -16,9 +16,13 @@ import java.sql.Time;
  */
 @Entity
 @NamedQuery(name="CirugiaProcedimiento.findAll", query="SELECT c FROM CirugiaProcedimiento c")
-public class CirugiaProcedimiento extends Model implements Serializable {
+public class CirugiaProcedimiento extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)	
+	private int idCirugiaProcedimiento;
+	
 	private Time horaFin;
 
 	private Time horaInicio;
@@ -37,6 +41,14 @@ public class CirugiaProcedimiento extends Model implements Serializable {
 	private Procedimiento procedimiento;
 
 	public CirugiaProcedimiento() {
+	}
+
+	public int getIdCirugiaProcedimiento() {
+		return idCirugiaProcedimiento;
+	}
+
+	public void setIdCirugiaProcedimiento(int idCirugiaProcedimiento) {
+		this.idCirugiaProcedimiento = idCirugiaProcedimiento;
 	}
 
 	public Time getHoraFin() {

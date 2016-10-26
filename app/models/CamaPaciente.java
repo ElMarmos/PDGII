@@ -16,9 +16,13 @@ import java.sql.Timestamp;
  */
 @Entity
 @NamedQuery(name="CamaPaciente.findAll", query="SELECT c FROM CamaPaciente c")
-public class CamaPaciente extends Model implements Serializable {
+public class CamaPaciente extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int IdCamaPaciente;
+	
 	private Timestamp fechaIngreso;
 
 	private Timestamp fechaSalida;
@@ -34,6 +38,14 @@ public class CamaPaciente extends Model implements Serializable {
 	private Paciente paciente;
 
 	public CamaPaciente() {
+	}
+
+	public int getIdCamaPaciente() {
+		return IdCamaPaciente;
+	}
+
+	public void setIdCamaPaciente(int idCamaPaciente) {
+		IdCamaPaciente = idCamaPaciente;
 	}
 
 	public Timestamp getFechaIngreso() {

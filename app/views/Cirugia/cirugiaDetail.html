@@ -1,0 +1,67 @@
+#{extends 'main.html' /}
+#{set title:'cirugiaDetail.html' /}
+
+<h2>Detalles Cirugia</h2>
+<hr/>
+<h3>Cirugia</h3>
+<dl>
+  <dt>Id Cirugia</dt>
+  <dd>${cirugia.idCirugia}</dd>
+  <dt>Paciente</dt>
+  <dd>${cirugia.paciente.nombres} ${cirugia.paciente.apellidos}</dd>
+  <dt>Quirofano</dt>
+  <dd>${cirugia.quirofano.nombreQuirofano}</dd>
+  <dt>Fecha Ingreso</dt>
+  <dd>${cirugia.fechaIngreso}</dd>
+  <dt>Fecha Salida</dt>
+  <dd>${cirugia.horaCierre}</dd>
+  <dt>Programación</dt>
+  <dd>${cirugia.programacion.idProgramacion}</dd>
+</dl>
+
+<br>
+
+<hr/>
+<h3>Procedimientos</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Procedimiento</th>
+      <th>Hora Inicio</th>
+      <th>Hora Fin</th>
+      <th>Observación</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  	#{list items:cirugia.cirugiaprocedimientos, as:'procedimiento'}
+  		<tr>
+	      <th>${procedimiento.procedimiento.procedimiento}</th>
+	      <td>${procedimiento.horaInicio}</td>
+	      <td>${procedimiento.horaFin}</td>
+	      <td>${procedimiento.observacion}</td>
+	    </tr>
+  	#{/list}
+  </tbody>
+</table>
+<hr/>
+<h3>Profesionales</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Profesional</th>
+      <th>Rol</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  	#{list items:cirugia.cirugiaprofesionalsaluds, as:'profesional'}
+  		<tr>
+	      <th>${profesional.profesionalsalud.nombres} ${profesional.profesionalsalud.apellidos}</th>
+	      <td>${profesional.rol}</td>
+	    </tr>
+  	#{/list}
+  </tbody>
+</table>
+<br>
+<a href="@{Planeacion.programacionDetails(cirugia.programacion.idProgramacion)}"><button type="button" class="btn btn-default">Volver</button></a>

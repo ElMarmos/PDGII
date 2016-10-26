@@ -18,6 +18,7 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idProfesionalSalud;
 
 	private String apellidos;
@@ -41,8 +42,41 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 	// bi-directional many-to-one association to ProfesionalSaludEspecialidad
 	@OneToMany(mappedBy = "profesionalsalud")
 	private List<ProfesionalSaludEspecialidad> profesionalsaludespecialidads;
+	
+	//bi-directional many-to-one association to CamaPaciente
+	@OneToMany(mappedBy="profesionalSalud")
+	private List<PlaneacionProfesionales> planeacionesProfesionales;
 
 	public ProfesionalSalud() {
+	}
+	
+	public boolean hasEspecialidad(Solicitud solicitud){
+		if(solicitud != null && solicitud.getSolicitudProcedimientos() != null){
+			for(SolicitudProcedimientos soliProcedimientos: solicitud.getSolicitudProcedimientos()){
+				if(profesionalsaludespecialidads != null){
+					for (ProfesionalSaludEspecialidad profeEspecialidad : profesionalsaludespecialidads) {
+						if(profeEspecialidad.getEspecialidad().getNombreEspecialidad().equals(soliProcedimientos.getProcedimiento().getEspecialidad().getNombreEspecialidad())){
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+		
+	}
+	
+	public boolean hasEspecialidad(String especialidad){
+		if(profesionalsaludespecialidads != null){
+			for (ProfesionalSaludEspecialidad profeEspecialidad : profesionalsaludespecialidads) {
+				if(profeEspecialidad.getEspecialidad().getNombreEspecialidad().equals(especialidad)){
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	public int getIdProfesionalSalud() {
@@ -160,6 +194,24 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 		profesionalsaludespecialidad.setProfesionalsalud(null);
 
 		return profesionalsaludespecialidad;
+	}
+	
+	public List<PlaneacionProfesionales> getPlaneacionesProfesionales() {
+		return planeacionesProfesionales;
+	}
+	public void setPlaneacionesProfesionales(List<PlaneacionProfesionales> planeacionesProfesionales) {
+		this.planeacionesProfesionales = planeacionesProfesionales;
+	}
+	public PlaneacionProfesionales addPlaneacionProfesionales(PlaneacionProfesionales planeacionProfesionales){
+		getPlaneacionesProfesionales().add(planeacionProfesionales);
+		planeacionProfesionales.setProfesionalSalud(this);
+		return planeacionProfesionales;
+	}
+	
+	public PlaneacionProfesionales removeCirugia(PlaneacionProfesionales planeacionProfesionales){
+		getPlaneacionesProfesionales().remove(planeacionProfesionales);
+		planeacionProfesionales.setProfesionalSalud(null);
+		return planeacionProfesionales;
 	}
 
 }

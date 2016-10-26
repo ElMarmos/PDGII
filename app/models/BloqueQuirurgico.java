@@ -21,6 +21,7 @@ public class BloqueQuirurgico extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idBloqueQuirurgico;
 
 	private byte habilitado;
@@ -36,6 +37,8 @@ public class BloqueQuirurgico extends GenericModel implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	private Date fechaInicio;
+	
+	private String dias;
 
 	//bi-directional many-to-one association to BloqueDisponibilidad
 	@OneToMany(mappedBy="bloquequirurgico")
@@ -134,8 +137,12 @@ public class BloqueQuirurgico extends GenericModel implements Serializable {
 	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
-	
-	
-	
 
+	public String getDias() {
+		return dias;
+	}
+
+	public void setDias(String dias) {
+		this.dias = dias;
+	}
 }

@@ -16,9 +16,13 @@ import java.sql.Timestamp;
  */
 @Entity
 @NamedQuery(name="Seguimiento.findAll", query="SELECT s FROM Seguimiento s")
-public class Seguimiento extends Model implements Serializable {
+public class Seguimiento extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idSeguimiento;
+	
 	private Timestamp fechaCambio;
 
 	//bi-directional many-to-one association to Estado
@@ -32,6 +36,14 @@ public class Seguimiento extends Model implements Serializable {
 	private Paciente paciente;
 
 	public Seguimiento() {
+	}
+
+	public int getIdSeguimiento() {
+		return idSeguimiento;
+	}
+
+	public void setIdSeguimiento(int idSeguimiento) {
+		this.idSeguimiento = idSeguimiento;
 	}
 
 	public Timestamp getFechaCambio() {

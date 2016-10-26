@@ -2,30 +2,215 @@
 #{set title:'programacionDetails.html' /}
 <script>
 	var cirugias = [];
+	var events = [];
 </script>
 
-#{list items:cirugias, as:'cirugia'}
-	<script>
-		var surgery = new Object();
-		surgery.idCirugia = "${cirugia.idCirugia}";
-		surgery.idQuirofano = "${cirugia.quirofano.idQuirofano}";
-		surgery.nombreQuirofano = "${cirugia.quirofano.nombreQuirofano}";
-		surgery.fechaIngreso = new Date("${cirugia.fechaIngreso}");
-		surgery.horaCierre = new Date("${cirugia.horaCierre}");
-		cirugias.push(surgery);
-	</script>
-#{/list}
+#{if cirugias.size > 0}
+
+
+<div class="row">
+	<div class="col-md-12">
+		
+	</div>
+</div>
+<ul class="nav nav-tabs" id="tabscharts">
+  <li class="active"><a data-toggle="tab" href="#gantt">Gantt</a></li>
+  <li><a data-toggle="tab" href="#barras" onclick="initBarChart();">Barras</a></li>
+  <li><a data-toggle="tab" href="#booking" id="bookingTab" onclick="initBooking();">Booking</a></li>
+  <li><a data-toggle="tab" href="#tablas">Tablas</a></li>
+  #{if programacion.principal == true }
+	<li class="pull-right"><span class="glyphicon glyphicon-star" aria-hidden="true" style="color: green; font-size: 43px;"></span></li>
+  #{/if}
+  
+</ul>
+<br/>
+<div class="tab-content">
+  <div id="gantt" class="tab-pane fade in active">
+  	<form class="form-inline">
+	  <div class="form-group">
+	    <label for="quirofano1">Quirofano</label>
+	    <select class="form-control" id="quirofano1" onchange="updateGantt();">
+	    	#{list items:quirofanos, as:'quirofano'}
+	    		<option>${quirofano.nombreQuirofano}</option>
+	    	#{/list}
+		</select>
+		<br/>
+	  </div>
+	  <br/>
+	</form>
+  	<div id="ganttChart" ></div>
+  </div>
+  <div id="barras" class="tab-pane fade">
+    <div id="barChart" ></div>
+  </div>
+  <div id="booking" class="tab-pane fade">
+	  <div class="row">
+	  	<div class="col-md-12">
+	  		<form class="form-inline">
+			  <div class="form-group">
+			    <label for="quirofano">Quirofano</label>
+			    <select class="form-control" id="quirofano" onchange="updateBooking();">
+			    	#{list items:quirofanos, as:'quirofano'}
+			    		<option>${quirofano.nombreQuirofano}</option>
+			    	#{/list}
+				</select>
+				<br/>
+				<br/>
+			  </div>
+			  <br/>
+			</form>
+	  	</div>	
+	  </div>
+	  <div class="row">
+	  	<div class="col-md-12">
+	  		<div id="scheduler_here" class="dhx_cal_container" style="width:100%; height:600px; padding:10px;">
+			    <div class="dhx_cal_navline">
+			        <div class="dhx_cal_prev_button">&nbsp;</div>
+			        <div class="dhx_cal_next_button">&nbsp;</div>
+			        <div class="dhx_cal_today_button"></div>
+			        <div class="dhx_cal_date"></div>
+			        <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+			        <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+			        <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+			    </div>
+			    <div class="dhx_cal_header"></div>
+			    <div class="dhx_cal_data"></div>       
+			</div>
+	  	</div>
+	  	
+	  </div>
+  </div>
+  <div id="tablas" class="tab-pane fade">
+  	<table class="table">
+	  <thead>
+	    <tr>
+	      <th>Quirofano</th>
+	      <th>Paciente</th>
+	      <th>Fecha Ingreso</th>
+	      <th>Fecha Salida</th>
+	      <th></th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    #{list items:cirugias, as:'cirugia'}
+	    	<tr>
+		      <th>${cirugia.quirofano.nombreQuirofano}</th>
+		      <td>${cirugia.paciente.nombres}</td>
+		      <td>${cirugia.fechaIngreso}</td>
+		      <td>${cirugia.horaCierre}</td>
+		      <td><a href="@{Cirugia.cirugiaDetail(cirugia.idCirugia)}">Detalles</a></td>
+		    </tr>
+
+			<script>
+				var surgery = new Object();
+				surgery.idCirugia = "${cirugia.idCirugia}";
+				surgery.idQuirofano = "${cirugia.quirofano.idQuirofano}";
+				surgery.nombreQuirofano = "${cirugia.quirofano.nombreQuirofano}";
+				surgery.nombrePaciente = "${cirugia.paciente.nombres}";
+				surgery.fechaIngreso = new Date("${cirugia.fechaIngreso}");
+				surgery.horaCierre = new Date("${cirugia.horaCierre}");
+				surgery.start_date = "${cirugia.fechaIngreso}";
+				surgery.end_date = "${cirugia.horaCierre}";
+				cirugias.push(surgery);
+			</script>
+		#{/list}
+	  </tbody>
+	</table>
+  </div>
+</div>
+
+
+
+<a href="@{Planeacion.compareProgramacion(programacion.idProgramacion)}"><button type="button" class="btn btn-primary">Comparar</button></a>
+<a href="@{Planeacion.changeQuirofanoCirugia(programacion.idProgramacion)}"><button type="button" class="btn btn-primary">Editar Cirugia</button></a>
+<button type="button" onclick="serializeScheduler();" class="btn btn-primary">Guardar</button>
+
+#{if programacion.principal == false }
+	<button type="button" onclick="establecerProgramacion();" class="btn btn-primary" id="establecer">Establecer Programación Principal</button>
+#{/if}
+<a href="@{Planeacion.programacionesPorPlaneacion(programacion.planeacion.idPlaneacion)}"><button type="button" class="btn btn-default">Volver</button></a>
 <script>
 	
-	google.charts.load('current', {'packages':['timeline']});
-	google.charts.setOnLoadCallback(drawChart);
-	
-	function daysToMilliseconds(days) {
-	  return days * 24 * 60 * 60 * 1000;
+	$(document).ready(function(){
+		initGanttChart();
+	});
+
+
+	/** Gantt Chart */ 
+
+	function initGanttChart(){
+		google.charts.load('current', {'packages':['gantt']});
+    	google.charts.setOnLoadCallback(drawGanttChart);
 	}
+
+    function daysToMilliseconds(days) {
+      return days * 24 * 60 * 60 * 1000;
+    }
+
+    function drawGanttChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Task ID');
+      data.addColumn('string', 'Task Name');
+      data.addColumn('date', 'Start Date');
+      data.addColumn('date', 'End Date');
+      data.addColumn('number', 'Duration');
+      data.addColumn('number', 'Percent Complete');
+      data.addColumn('string', 'Dependencies');
+
+
+      var rows = [];
+	  var quirofanoSelected = $("#quirofano1").val();
+		cirugias.forEach(function(item){
+			if(item.nombreQuirofano == quirofanoSelected){
+				rows.push([item.idCirugia, item.nombrePaciente , item.fechaIngreso, item.horaCierre, null, 100, null]); 
+			}	
+		  });
+	  data.addRows(rows);
+      var chart = new google.visualization.Gantt(document.getElementById('ganttChart'));
+
+      chart.draw(data);
+
+	}
+
+	function updateGantt(){
+		var chart = new google.visualization.Gantt(document.getElementById('ganttChart'));
+		var rows = [];
+		var quirofanoSelected = $("#quirofano1").val();
+    	cirugias.forEach(function(item){
+    		if(item.nombreQuirofano == quirofanoSelected){
+    			rows.push([item.idCirugia, item.nombrePaciente , item.fechaIngreso, item.horaCierre, null, 100, null]); 
+    		}	
+		  });
+
+    	var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Task ID');
+		data.addColumn('string', 'Task Name');
+		data.addColumn('date', 'Start Date');
+		data.addColumn('date', 'End Date');
+		data.addColumn('number', 'Duration');
+		data.addColumn('number', 'Percent Complete');
+		data.addColumn('string', 'Dependencies');
+		chart.clearChart();
+		data.addRows(rows);
+    	chart.draw(data);
+
+	}
+
+
+	/** Bar Chart */
+
+	function initBarChart(){
+		setTimeout(function (){
+			google.charts.load('current', {'packages':['timeline']});
+			google.charts.setOnLoadCallback(drawBarChart);
+		},200);
+		
+	}
+
 	
-	function drawChart() {
-	  var container = document.getElementById('example3.1');
+	function drawBarChart() {
+	  var container = document.getElementById('barChart');
       var chart = new google.visualization.Timeline(container);
       var dataTable = new google.visualization.DataTable();
       
@@ -36,12 +221,121 @@
 	 
 	  var rows = [];
 	  cirugias.forEach(function(item){
-	  	rows.push([item.nombreQuirofano, item.idCirugia, item.fechaIngreso, item.horaCierre ]); 	
+	  	rows.push([item.nombreQuirofano, item.idCirugia + " - " + item.nombrePaciente , item.fechaIngreso, item.horaCierre ]); 	
 	  });
 	
 	  dataTable.addRows(rows);
 			
       chart.draw(dataTable);
     }
+
+    /** Booking Chart */
+	function initBooking() {
+		setTimeout(function (){
+			scheduler.config.multi_day = true;
+			scheduler.config.xml_date="%Y-%m-%d %H:%i";
+			scheduler.init('scheduler_here',new Date(),"week");
+			updateBooking();
+		},200);
+		
+		
+	}
+	
+	function updateBooking(){
+		var events = [];
+		var quirofanoSelected = $("#quirofano").val();
+    	cirugias.forEach(function(item){
+    		if(item.nombreQuirofano == quirofanoSelected){
+    			events.push({
+    				id : item.idCirugia,
+    				text : item.nombrePaciente,
+					start_date: item.start_date ,
+					end_date: item.end_date
+			  	});
+    		}	
+		  });
+    	var jsonevents = JSON.stringify(events);
+    	scheduler.clearAll();
+		scheduler.parse(jsonevents, "json");
+	}
+
+	function serializeScheduler(){
+
+		var json = scheduler.toJSON();
+
+		$.ajax({
+			url : '@{Planeacion.modificarCirugia}',
+			type : "POST",
+			data : {
+				json : json
+			},
+			success : function(data){
+				
+				var successMessage = $("#successMessage");
+				successMessage.empty();
+				successMessage.append(data);
+				$("#successAlert").css("display", "block");
+				
+			}
+		}).fail(function() {
+			var errorMessage = $("#successError");
+			errorMessage.empty();
+			errorMessage.append(data);
+			$("#errorAlert").css("display", "block");
+		});
+	}
+
+	function establecerProgramacion(){
+		$.ajax({
+			url : '@{Planeacion.establecerProgramacionPrincipal}',
+			type : "POST",
+			data : {
+				idProgramacion : "${programacion.idProgramacion}"
+			},
+			success : function(data){
+				var successMessage = $("#successMessage");
+				successMessage.empty();
+				successMessage.append(data);
+				$("#successAlert").css("display", "block");
+				$("#tabscharts").append('<li class="pull-right"><span class="glyphicon glyphicon-star" aria-hidden="true" style="color: green; font-size: 43px;"></span></li>');
+				$("#establecer").css("display", "none");
+			}
+		}).fail(function() {
+			var errorMessage = $("#successError");
+			errorMessage.empty();
+			errorMessage.append(data);
+			$("#errorAlert").css("display", "block");
+		});
+	}
+
+
+	function show_minical(){
+		if (scheduler.isCalendarVisible())
+			scheduler.destroyCalendar();
+		else
+			scheduler.renderCalendar({
+				position:"dhx_minical_icon",
+				date:scheduler._date,
+				navigation:true,
+				handler:function(date,calendar){
+					scheduler.setCurrentView(date);
+					scheduler.destroyCalendar()
+				}
+			});
+	}
+
+    /* */
+
+    /* Table Chart */
+
 </script>
-<div id="example3.1" style="height: 1000px;"></div>
+#{/if}
+#{else}
+
+<br/><br/>
+<h3>No hay Cirugias asociadas a esta programación<h3/>
+<br/><br/>
+<a href="@{Planeacion.programacionesPorPlaneacion(programacion.planeacion.idPlaneacion)}"><button type="button" class="btn btn-default">Volver</button></a>
+<br/><br/>
+#{/else}
+

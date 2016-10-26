@@ -17,10 +17,13 @@ import java.util.Date;
  */
 @Entity
 @NamedQuery(name="BloqueDisponibilidad.findAll", query="SELECT b FROM BloqueDisponibilidad b")
-public class BloqueDisponibilidad extends Model implements Serializable {
+public class BloqueDisponibilidad extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idBloqueDisponibilidad;
+	
 	@Temporal(TemporalType.DATE)
 	private Date fechaFin;
 
@@ -30,6 +33,8 @@ public class BloqueDisponibilidad extends Model implements Serializable {
 	private Time horaFin;
 
 	private Time horaInicio;
+	
+	private String dias;
 
 	//bi-directional many-to-one association to BloqueQuirurgico
 	@ManyToOne
@@ -44,6 +49,12 @@ public class BloqueDisponibilidad extends Model implements Serializable {
 	public BloqueDisponibilidad() {
 	}
 
+	public int getIdBloqueDisponibilidad() {
+		return idBloqueDisponibilidad;
+	}
+	public void setIdBloqueDisponibilidad(int idBloqueDisponibilidad) {
+		this.idBloqueDisponibilidad = idBloqueDisponibilidad;
+	}
 	public Date getFechaFin() {
 		return this.fechaFin;
 	}
@@ -90,6 +101,14 @@ public class BloqueDisponibilidad extends Model implements Serializable {
 
 	public void setDisponibilidadprofesional(DisponibilidadProfesional disponibilidadprofesional) {
 		this.disponibilidadprofesional = disponibilidadprofesional;
+	}
+	
+	public String getDias() {
+		return dias;
+	}
+
+	public void setDias(String dias) {
+		this.dias = dias;
 	}
 
 }

@@ -20,6 +20,7 @@ public class DisponibilidadProfesional extends GenericModel implements Serializa
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idDisponibilidadProfesional;
 
 	private byte habilitado;

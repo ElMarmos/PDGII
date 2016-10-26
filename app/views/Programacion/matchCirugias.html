@@ -1,20 +1,23 @@
 #{extends 'main.html' /}
 #{set title:'matchCirugias.html' /}
 
-<form action="@{Programacion.initProgramacion()}" method="GET">
+<form action="@{Programacion.saveMatchSurgeries()}" method="GET">
 	<center>
 		<table>
 			<tr>
 	    		<td><b>Cirugias</b></td>
 	    		<td><b>Cirujanos</b></td>
 	    	</tr>
-	    	#{list items:cirugias, as:'cirugia'}
+	    	#{list items:solicitudes, as:'solicitud'}
 		    	<tr>
-		    		<td>${cirugia.paciente.nombres} ${cirugia.paciente.apellidos}</td>
+		    		<td>${solicitud.paciente.nombres} ${solicitud.paciente.apellidos}</td>
 		    		<td>
-		    			<select>
+		    			<select id="${solicitud.idSolicitud}" name="${solicitud.idSolicitud}" class="form-control">
+		    				<option value="0">Seleccione Cirujano</option>
 		    				#{list items:cirujanos, as:'cirujano'}
-		    					<option value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}</option>
+		    					#{if cirujano.hasEspecialidad(solicitud)}
+		    						<option value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}</option>
+		    					#{/if}	
 		    				#{/list}
 						</select>
 		    		</td>
