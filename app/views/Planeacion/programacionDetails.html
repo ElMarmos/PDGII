@@ -122,7 +122,9 @@
 
 
 <a href="@{Planeacion.compareProgramacion(programacion.idProgramacion)}"><button type="button" class="btn btn-primary">Comparar</button></a>
+<a href="@{Planeacion.changeQuirofanoCirugia(programacion.idProgramacion)}"><button type="button" class="btn btn-primary">Editar Cirugia</button></a>
 <button type="button" onclick="serializeScheduler();" class="btn btn-primary">Guardar</button>
+
 #{if programacion.principal == false }
 	<button type="button" onclick="establecerProgramacion();" class="btn btn-primary" id="establecer">Establecer Programación Principal</button>
 #{/if}

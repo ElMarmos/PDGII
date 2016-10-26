@@ -26,6 +26,7 @@ import models.ProfesionalSalud;
 import models.Programacion;
 import models.Quirofano;
 import play.db.jpa.JPA;
+import play.libs.Time;
 import play.mvc.Controller;
 
 public class Planeacion extends Controller {
@@ -116,7 +117,17 @@ public class Planeacion extends Controller {
 		 }
 		 
 		 return message;
+	}
+	 
+	 public static void changeQuirofanoCirugia(int idProgramacion){
+		 Programacion programacion = Programacion.findById(idProgramacion);
+		 render(programacion);
 	 }
+	 
+	 public static void changeSurgeryQuirofano(int cirugia, int quirofano, Date dateinit, Date dateEnd, Time timeInit, Time timeEnd){
+		 Cirugia cirugiaObj = Cirugia.findById(cirugia);
+	 }
+
 	 
 	 public static String establecerProgramacionPrincipal(int idProgramacion){
 		 Programacion programacion = Programacion.findById(idProgramacion);

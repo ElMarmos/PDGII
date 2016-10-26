@@ -1,0 +1,56 @@
+#{extends 'main.html' /}
+#{set title:'changeQuirofanoCirugia.html' /}
+
+<center><p>Escoja la cirugia a la que quiere cambiar de quirofano y de fecha</p></center>
+
+<form class="form-horizontal" action="@{Planeacion.changeSurgeryQuirofano()}" method="POST">
+  <div class="form-group">
+    <label for="cirugia" class="col-sm-2 control-label">Cirugia</label>
+    <div class="col-sm-10">
+      <select id="cirugia" name="cirugia" class="form-control">
+      	#{list items:programacion.programacionCirugias , as:'cirugia'}
+   			<option value="${cirugia.idCirugia}">${cirugia.paciente.nombres}</option>
+   		#{/list}
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="quirofano" class="col-sm-2 control-label">Quirofanos</label>
+    <div class="col-sm-10">
+      <select id="quirofano" name="quirofano" class="form-control">
+      	#{list items:programacion.planeacion.planeacionesQuirofanos , as:'pquirofanos'}
+			<option value="${pquirofanos.quirofano.idQuirofano}">${pquirofanos.quirofano.nombreQuirofano}</option>
+	   	#{/list}
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+	<label for="dateinit" class="col-sm-2 control-label">Fecha inicio cirugia</label>
+	<div class="col-sm-10">
+        <input type="datetime" name="dateinit" class="form-control">
+    </div>
+  </div>
+  <div class="form-group">
+	<label for="dateEnd" class="col-sm-2 control-label">Fecha fin cirugia</label>
+	<div class="col-sm-10">
+        <input type="datetime" name="dateEnd" class="form-control">
+    </div>
+  </div>
+  <div class="form-group">
+	<label for="timeInit" class="col-sm-2 control-label">Hora inicio cirugia</label>
+	<div class="col-sm-10">
+        <input type="time" name="timeInit" class="form-control">
+    </div>
+  </div>
+  <div class="form-group">
+	<label for="timeEnd" class="col-sm-2 control-label">Hora fin cirugia</label>
+	<div class="col-sm-10">
+        <input type="time" name="timeEnd" class="form-control">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Cambiar</button>
+    </div>
+  </div>
+</form>
