@@ -33,7 +33,10 @@ public class ProfesionalSaludEspecialidad extends GenericModel implements Serial
 	@JoinColumn(name="idProfesionalSalud")
 	private ProfesionalSalud profesionalsalud;
 
-	public ProfesionalSaludEspecialidad() {
+	public ProfesionalSaludEspecialidad(ProfesionalSalud profesional, Especialidad especialidad, int prioridad) {
+		this.profesionalsalud = profesional;
+		this.especialidad = especialidad;
+		this.prioridad = prioridad;
 	}
 
 	public int getIdProfesionalSaludEspecialista() {

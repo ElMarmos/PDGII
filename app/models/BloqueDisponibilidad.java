@@ -46,7 +46,14 @@ public class BloqueDisponibilidad extends GenericModel implements Serializable {
 	@JoinColumn(name="idDisponibilidadProfesional")
 	private DisponibilidadProfesional disponibilidadprofesional;
 
-	public BloqueDisponibilidad() {
+	public BloqueDisponibilidad(BloqueQuirurgico bloqueQuirurjico, DisponibilidadProfesional disponibilidadProfesional, Date fechaInicio, Time horaInicio, Date fechaFin, Time horaFin, String dias) {
+		this.bloquequirurgico = bloqueQuirurjico;
+		this.disponibilidadprofesional = disponibilidadProfesional;
+		this.fechaInicio = fechaInicio;
+		this.fechaFin = fechaFin;
+		this.horaInicio = horaInicio;
+		this.horaFin = horaFin;
+		this.dias = dias;
 	}
 
 	public int getIdBloqueDisponibilidad() {
@@ -101,14 +108,6 @@ public class BloqueDisponibilidad extends GenericModel implements Serializable {
 
 	public void setDisponibilidadprofesional(DisponibilidadProfesional disponibilidadprofesional) {
 		this.disponibilidadprofesional = disponibilidadprofesional;
-	}
-	
-	public String getDias() {
-		return dias;
-	}
-
-	public void setDias(String dias) {
-		this.dias = dias;
 	}
 
 }

@@ -7,6 +7,8 @@ import javax.persistence.*;
 import play.db.jpa.GenericModel;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -48,10 +50,18 @@ public class Solicitud extends GenericModel implements Serializable {
 	//bi-directional many-to-many association to SolicitudProcedimientos
 	@OneToMany(mappedBy="solicitud")
 	private List<SolicitudProcedimientos> solicitudProcedimientos;
-	
-	
 
-	public Solicitud() {
+	public Solicitud(Date fechaAtencion, Date fechaCirugia, Date fechaProgramacion, Date fechaSolicitud, String jornadaPreferencia, String tipoPaciente, Paciente paciente, Cirujano cirujano) {
+		this.fechaAtencion = new Timestamp(fechaAtencion.getTime());
+		this.fechaCirugia = new Timestamp(fechaCirugia.getTime());
+		this.fechaProgramacion = new Timestamp(fechaProgramacion.getTime());
+		this.fechaSolicitud = new Timestamp(fechaSolicitud.getTime());
+		this.jornadaPreferencia = jornadaPreferencia;
+		this.tipoPaciente = tipoPaciente;
+		this.paciente = paciente;
+		this.cirujano = cirujano;
+		
+		this.solicitudProcedimientos = new ArrayList<>();
 	}
 
 	public int getIdSolicitud() {

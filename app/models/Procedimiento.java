@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,7 +20,6 @@ public class Procedimiento extends GenericModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int codigoProcedimiento;
 
 	@Lob
@@ -38,7 +38,11 @@ public class Procedimiento extends GenericModel implements Serializable {
 	@OneToMany(mappedBy="procedimiento")
 	private List<SolicitudProcedimientos> solicitudProcedimientos;
 
-	public Procedimiento() {
+	public Procedimiento(int codigoProcedimiento, String procedimiento, Especialidad especialidad) {
+		this.especialidad = especialidad;
+		this.codigoProcedimiento = codigoProcedimiento;
+		this.procedimiento = procedimiento;
+		this.solicitudProcedimientos = new ArrayList<>();
 	}
 
 	public int getCodigoProcedimiento() {

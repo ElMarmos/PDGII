@@ -35,7 +35,10 @@ public class QuirofanoEspecialidad extends GenericModel implements Serializable 
 	
 	private double prioridad;
 
-	public QuirofanoEspecialidad() {
+	public QuirofanoEspecialidad(Quirofano quirofano, Especialidad especialidad, double prioridad) {
+		this.quirofano = quirofano;
+		this.especialidad = especialidad;
+		this.prioridad = prioridad;
 	}
 
 	public int getIdQuirofanoEspecialidad() {

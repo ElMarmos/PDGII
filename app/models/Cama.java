@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,7 +31,10 @@ public class Cama extends GenericModel implements Serializable {
 	@OneToMany(mappedBy="cama")
 	private List<CamaPaciente> camapacientes;
 
-	public Cama() {
+	public Cama(String codigo, String estado) {
+		this.codigo = codigo;
+		this.estado = estado;
+		this.camapacientes = new ArrayList<>();
 	}
 
 	public int getIdCama() {

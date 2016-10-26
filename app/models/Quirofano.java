@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,7 +46,14 @@ public class Quirofano extends GenericModel implements Serializable {
 	@OneToMany(mappedBy="quirofano")
 	private List<PlaneacionQuirofanos> planeacionesQuirofanos;
 
-	public Quirofano() {
+	public Quirofano(String nombreQuirofano, Pabellon pabellon) {
+		this.nombreQuirofano = nombreQuirofano;
+		this.pabellon = pabellon;
+		
+		this.cirugias = new ArrayList<Cirugia>();
+		this.quirofanoDotaciones = new ArrayList<QuirofanoDotacion>();
+		this.quirofanoEspecialidades = new ArrayList<QuirofanoEspecialidad>();
+		this.planeacionesQuirofanos = new ArrayList<PlaneacionQuirofanos>();
 	}
 
 	public int getIdQuirofano() {

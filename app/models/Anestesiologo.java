@@ -24,7 +24,8 @@ public class Anestesiologo extends GenericModel implements Serializable {
 	@JoinColumn(name = "idProfesionalSalud")
 	private ProfesionalSalud profesionalsalud;
 
-	public Anestesiologo() {
+	public Anestesiologo(ProfesionalSalud profesionalSalud) {
+		this.profesionalsalud = profesionalSalud;
 	}
 
 	public int getIdAnestesiologo() {

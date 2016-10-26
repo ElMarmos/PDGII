@@ -33,7 +33,9 @@ public class Patientologia extends GenericModel implements Serializable {
 	@JoinColumn(name="idPatologia")
 	private Patologia patologia;
 
-	public Patientologia() {
+	public Patientologia(Paciente paciente, Patologia patologia){
+		this.paciente = paciente;
+		this.patologia = patologia;
 	}
 
 	public int getIdPatientologia() {
