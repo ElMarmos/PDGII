@@ -49,6 +49,35 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 
 	public ProfesionalSalud() {
 	}
+	
+	public boolean hasEspecialidad(Solicitud solicitud){
+		if(solicitud != null && solicitud.getSolicitudProcedimientos() != null){
+			for(SolicitudProcedimientos soliProcedimientos: solicitud.getSolicitudProcedimientos()){
+				if(profesionalsaludespecialidads != null){
+					for (ProfesionalSaludEspecialidad profeEspecialidad : profesionalsaludespecialidads) {
+						if(profeEspecialidad.getEspecialidad().getNombreEspecialidad().equals(soliProcedimientos.getProcedimiento().getEspecialidad().getNombreEspecialidad())){
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+		
+	}
+	
+	public boolean hasEspecialidad(String especialidad){
+		if(profesionalsaludespecialidads != null){
+			for (ProfesionalSaludEspecialidad profeEspecialidad : profesionalsaludespecialidads) {
+				if(profeEspecialidad.getEspecialidad().getNombreEspecialidad().equals(especialidad)){
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 
 	public int getIdProfesionalSalud() {
 		return this.idProfesionalSalud;

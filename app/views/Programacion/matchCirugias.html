@@ -15,7 +15,9 @@
 		    			<select id="${solicitud.idSolicitud}" name="${solicitud.idSolicitud}">
 		    				<option value="0">Seleccione Cirujano</option>
 		    				#{list items:cirujanos, as:'cirujano'}
-		    					<option value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}</option>
+		    					#{if cirujano.hasEspecialidad(solicitud)}
+		    						<option value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}</option>
+		    					#{/if}	
 		    				#{/list}
 						</select>
 		    		</td>
