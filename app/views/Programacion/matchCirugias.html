@@ -12,10 +12,12 @@
 		    	<tr>
 		    		<td>${solicitud.paciente.nombres} ${solicitud.paciente.apellidos}</td>
 		    		<td>
-		    			<select id="${solicitud.idSolicitud}" name="${solicitud.idSolicitud}">
+		    			<select id="${solicitud.idSolicitud}" name="${solicitud.idSolicitud}" class="form-control">
 		    				<option value="0">Seleccione Cirujano</option>
 		    				#{list items:cirujanos, as:'cirujano'}
-		    					<option value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}</option>
+		    					#{if cirujano.hasEspecialidad(solicitud)}
+		    						<option value="${cirujano.idProfesionalSalud}">${cirujano.nombres} ${cirujano.apellidos}</option>
+		    					#{/if}	
 		    				#{/list}
 						</select>
 		    		</td>
