@@ -8,8 +8,9 @@
     <label for="cirugia" class="col-sm-2 control-label">Cirugia</label>
     <div class="col-sm-10">
       <select id="cirugia" name="cirugia" class="form-control">
+      	<option value="0">Seleccione cirugia</option>
       	#{list items:programacion.programacionCirugias , as:'cirugia'}
-   			<option value="${cirugia.idCirugia}">${cirugia.paciente.nombres}</option>
+   			<option value="${cirugia.idCirugia}">${cirugia.paciente.nombres} ${cirugia.paciente.apellidos}</option>
    		#{/list}
       </select>
     </div>
@@ -18,8 +19,9 @@
     <label for="quirofano" class="col-sm-2 control-label">Quirofanos</label>
     <div class="col-sm-10">
       <select id="quirofano" name="quirofano" class="form-control">
-      	#{list items:programacion.planeacion.planeacionesQuirofanos , as:'pquirofanos'}
-			<option value="${pquirofanos.quirofano.idQuirofano}">${pquirofanos.quirofano.nombreQuirofano}</option>
+      	<option value="0">Seleccione quirofano</option>
+      	#{list items:quirofanos , as:'quirofano'}
+			<option value="${quirofano.idQuirofano}">${quirofano.nombreQuirofano}</option>
 	   	#{/list}
       </select>
     </div>
@@ -27,13 +29,13 @@
   <div class="form-group">
 	<label for="dateinit" class="col-sm-2 control-label">Fecha inicio cirugia</label>
 	<div class="col-sm-10">
-        <input type="datetime" name="dateinit" class="form-control">
+        <input type="date" name="dateinit" class="form-control">
     </div>
   </div>
   <div class="form-group">
 	<label for="dateEnd" class="col-sm-2 control-label">Fecha fin cirugia</label>
 	<div class="col-sm-10">
-        <input type="datetime" name="dateEnd" class="form-control">
+        <input type="date" name="dateEnd" class="form-control">
     </div>
   </div>
   <div class="form-group">
@@ -51,6 +53,8 @@
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-default">Cambiar</button>
+      <a href='@{Planeacion.programacionDetails(programacion.idProgramacion+"")}'><button type="button" class="btn btn-default">Volver</button></a>
     </div>
   </div>
+
 </form>
