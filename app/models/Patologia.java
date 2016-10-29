@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,6 +30,7 @@ public class Patologia extends GenericModel implements Serializable {
 	private List<Patientologia> patientologias;
 
 	public Patologia() {
+		patientologias = new ArrayList<>();
 	}
 
 	public int getIdPatologia() {

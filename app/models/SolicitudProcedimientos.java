@@ -33,7 +33,9 @@ public class SolicitudProcedimientos extends GenericModel implements Serializabl
 	@JoinColumn(name="idProcedimiento")
 	private Procedimiento procedimiento;
 
-	public SolicitudProcedimientos() {
+	public SolicitudProcedimientos(Solicitud solicitud, Procedimiento procedimiento) {
+		this.solicitud = solicitud;
+		this.procedimiento = procedimiento;
 	}
 	
 	public int getIdSolicitudProcedimiento() {

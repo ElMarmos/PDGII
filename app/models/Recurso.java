@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,7 +29,9 @@ public class Recurso extends GenericModel implements Serializable {
 	@OneToMany(mappedBy="recurso")
 	private List<RecursoCirugia> recursocirugias;
 
-	public Recurso() {
+	public Recurso(String nombre) {
+		this.nombre = nombre;
+		this.recursocirugias = new ArrayList<>();
 	}
 
 	public int getIdRecurso() {

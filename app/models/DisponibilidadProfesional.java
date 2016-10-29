@@ -7,6 +7,7 @@ import javax.persistence.*;
 import play.db.jpa.GenericModel;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,7 +48,15 @@ public class DisponibilidadProfesional extends GenericModel implements Serializa
 	@JoinColumn(name="idProfesionalSalud")
 	private ProfesionalSalud profesionalsalud;
 
-	public DisponibilidadProfesional() {
+	public DisponibilidadProfesional(ProfesionalSalud profesional, Time horaInicio, Time horaFin, String periodoInicio, String periodoFin, String repeticion) {
+		this.profesionalsalud = profesional;
+		this.horaInicio = horaInicio;
+		this.horaFin = horaFin;
+		this.periodoInicio = periodoInicio;
+		this.periodoFin = periodoFin;
+		this.repeticion = repeticion;
+		
+		this.bloquedisponibilidads = new ArrayList<BloqueDisponibilidad>();
 	}
 
 	public int getIdDisponibilidadProfesional() {
