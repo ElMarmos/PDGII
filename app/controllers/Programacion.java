@@ -21,6 +21,7 @@ import play.db.jpa.JPA;
 import play.mvc.*;
 import play.mvc.results.RenderTemplate;
 
+@With(Secure.class)
 public class Programacion extends Controller {
 
 	

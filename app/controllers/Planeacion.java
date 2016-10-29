@@ -28,7 +28,9 @@ import models.Quirofano;
 import play.db.jpa.JPA;
 import play.libs.Time;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Secure.class)
 public class Planeacion extends Controller {
 	
 	 public static void index() {
