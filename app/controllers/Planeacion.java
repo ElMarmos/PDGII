@@ -75,7 +75,7 @@ public class Planeacion extends Controller {
 		 List<Programacion> programaciones = Programacion.find("byPlaneacion", programacion.getPlaneacion()).fetch();
 		 //List<Programacion> programaciones = programacion.getPlaneacion().getPlaneacionProgramaciones();
 		 
-		 List<Cirugia> cirugias = Cirugia.find("programacion = ? order by quirofano", programacion).fetch();
+		 List<Cirugia> cirugias = Cirugia.find("programacion = ? and estado != 'Eliminada' order by quirofano", programacion).fetch();
 		 List<Quirofano> quirofanos = new ArrayList<Quirofano>();
 		 for (Cirugia cirugia : cirugias) {
 			if(!quirofanos.contains(cirugia.getQuirofano())){
@@ -121,12 +121,95 @@ public class Planeacion extends Controller {
 	 
 	 public static void changeQuirofanoCirugia(int idProgramacion){
 		 Programacion programacion = Programacion.findById(idProgramacion);
-		 render(programacion);
+		 List<Quirofano> quirofanos = Quirofano.findAll();
+		 render(programacion, quirofanos);
 	 }
 	 
-	 public static void changeSurgeryQuirofano(int cirugia, int quirofano, Date dateinit, Date dateEnd, Time timeInit, Time timeEnd){
-		 Cirugia cirugiaObj = Cirugia.findById(cirugia);
+	 public static void changeSurgeryQuirofano(int cirugia, int quirofano, Date dateinit, Date dateEnd, String timeInit, String timeEnd){
+		 
+		 if(cirugia > 0 && quirofano > 0 && dateinit != null && dateEnd != null && timeInit != null && !timeInit.equals("") && timeEnd != null && !timeEnd.equals("")){
+			Cirugia cirugiaObj = Cirugia.findById(cirugia);
+			Query query = JPA.em().createQuery("SELECT c FROM Cirugia c WHERE c.quirofano.idQuirofano = :qui AND c.programacion.idProgramacion = :progra AND c.idCirugia != :cir");
+			query.setParameter("qui", quirofano);
+			query.setParameter("progra", cirugiaObj.getProgramacion().getIdProgramacion());
+			query.setParameter("cir", cirugia);
+			
+			Calendar calInit = Calendar.getInstance();
+			calInit.setTime(dateinit);
+			String[] timeBegin = timeInit.split(":");
+			calInit.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeBegin[0]));
+			calInit.set(Calendar.MINUTE, Integer.parseInt(timeBegin[1]));
+			dateinit = calInit.getTime();
+			
+			Calendar calEnd = Calendar.getInstance();
+			calEnd.setTime(dateEnd);
+			String[] timeLast = timeEnd.split(":");
+			calEnd.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeLast[0]));
+			calEnd.set(Calendar.MINUTE, Integer.parseInt(timeLast[1]));
+			dateEnd = calEnd.getTime();
+			
+			List<Cirugia> cirugias = query.getResultList();
+			boolean noEspacio = false;
+			for (int i = 0; i < cirugias.size() && !noEspacio; i++) {
+				Cirugia surgery = cirugias.get(i);
+				if((surgery.getFechaIngreso().compareTo(dateinit) >= 0 && surgery.getHoraCierre().compareTo(dateinit) <= 0)
+						|| (surgery.getFechaIngreso().compareTo(dateEnd) >= 0 && surgery.getHoraCierre().compareTo(dateEnd) <= 0)){
+					noEspacio = true;
+				}
+			}
+			
+			if(!noEspacio){
+				cirugiaObj.setFechaIngreso(dateinit);
+				cirugiaObj.setHoraCierre(dateEnd);
+				Quirofano quirofano2 = Quirofano.findById(quirofano);
+				cirugiaObj.setQuirofano(quirofano2);
+				cirugiaObj.save();
+				String idProgramacion = cirugiaObj.getProgramacion().getIdProgramacion() +"";
+				programacionDetails(idProgramacion);
+			}
+		 }
+
+		 if(cirugia > 0){
+			Cirugia cirugiaObj = Cirugia.findById(cirugia);
+			int idProgramacion = cirugiaObj.getProgramacion().getIdProgramacion();
+			changeQuirofanoCirugia(idProgramacion);
+		 }else{
+			 index();
+		 }
+		
+		 
 	 }
+	 
+	 public static void deleteCirugia(int idProgramacion){
+		Query query = JPA.em().createQuery("SELECT c FROM Cirugia c WHERE c.programacion.idProgramacion = :progra AND c.estado != 'Eliminada'");
+		query.setParameter("progra", idProgramacion);
+		List<Cirugia> cirugias = query.getResultList();
+		Programacion programacion = Programacion.findById(idProgramacion);
+		render(cirugias, programacion);
+	 }
+	 
+	 public static void eliminarCirugia(int cirugia){
+		 Cirugia cirugia2 = Cirugia.findById(cirugia);
+		 cirugia2.setEstado("Eliminada");
+		 cirugia2.save();
+		 programacionDetails(cirugia2.getProgramacion().getIdProgramacion()+"");
+	 }
+	 
+	 public static void enableCirugia(int idProgramacion){
+		Query query = JPA.em().createQuery("SELECT c FROM Cirugia c WHERE c.programacion.idProgramacion = :progra AND c.estado = 'Eliminada'");
+		query.setParameter("progra", idProgramacion);
+		List<Cirugia> cirugias = query.getResultList();
+		Programacion programacion = Programacion.findById(idProgramacion);
+		render(cirugias, programacion);
+	 }
+	 
+	 public static void habilitarCirugia(int cirugia){
+		 Cirugia cirugia2 = Cirugia.findById(cirugia);
+		 cirugia2.setEstado("Solicitada");
+		 cirugia2.save();
+		 programacionDetails(cirugia2.getProgramacion().getIdProgramacion()+"");
+	 }
+
 
 	 
 	 public static String establecerProgramacionPrincipal(int idProgramacion){
