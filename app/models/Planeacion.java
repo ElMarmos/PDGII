@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 
 import java.sql.Timestamp;
@@ -22,16 +24,17 @@ public class Planeacion extends GenericModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	private int idPlaneacion;
-
+	@Expose
 	private Date fechaProgramacion;
-
+	@Expose
 	private Date fechaInicio;
-
+	@Expose
 	private Date fechaFin;
-	
+	@Expose
 	private int numeroPacientes;
-	
+	@Expose
 	private int tiempoProcesamiento;
 	
 	//bi-directional many-to-one association to CirugiaProfesionalsalud

@@ -1,9 +1,20 @@
 #{extends 'main.html' /}
 #{set title:'compareProgramacion.html' /}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.index()}">Generaciones de Programación</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.programacionesPorPlaneacion(programacion.planeacion.idPlaneacion)}">Programaciones</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.programacionDetails(programacion.idProgramacion)}">Programación - ${programacion.idProgramacion}</a></li>
+  <li class="breadcrumb-item active">Comparar Programación</li>
+</ol>
+<center><h1>Comparar Programación</h1></center>
+<center><p class="lead">Comparación con otras programaciones creadas por el mismo proceso de generación de programaciones</p></center>
+<hr/>
+<br/>
 
 <div class="row">
   <div class="form-group">
-    <label for="indicadores">Indicadores</label>
+    <label for="indicadores">Indicadores </label>
    	<select id="indicadores" name="indicadores" multiple="" class="form-control">
    	<option value="0" selected="">Todos</option>
    		#{list items:programacion.programacionIndicadores, as:'indicador'}

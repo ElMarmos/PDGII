@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 import play.db.jpa.Model;
 
@@ -19,13 +21,15 @@ public class ProfesionalSaludEspecialidad extends GenericModel implements Serial
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	private int IdProfesionalSaludEspecialista;
-	
+	@Expose
 	private int prioridad;
 
 	//bi-directional many-to-one association to Especialidad
 	@ManyToOne
 	@JoinColumn(name="idEspecialidad")
+	@Expose
 	private Especialidad especialidad;
 
 	//bi-directional many-to-one association to ProfesionalSalud

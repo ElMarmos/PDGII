@@ -1,0 +1,30 @@
+#{extends 'main.html' /}
+#{set title:'programming.html' /}
+<style type="text/css">
+	.glyphicon-refresh-animate {
+	    -animation: spin .7s infinite linear;
+	    -webkit-animation: spin2 .7s infinite linear;
+	}
+	@-webkit-keyframes spin2 {
+	    from { -webkit-transform: rotate(0deg);}
+	    to { -webkit-transform: rotate(360deg);}
+	}
+
+	@keyframes spin {
+	    from { transform: scale(1) rotate(0deg);}
+	    to { transform: scale(1) rotate(360deg);}
+	}
+</style>
+<div class="page-header">
+	<h1 class="text-center">Programando las cirugías</h1>
+</div>
+<div class="row">
+	<center><h1><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span></h1></center>
+</div>
+<div class="row" style="display: block;">
+	<center><h3>Programación exitosa, puede ver los detalles <a href="@{Planeacion.programacionesPorPlaneacion(planeacion.idPlaneacion)}">aquí</a></h3></center>
+</div>
+
+<script type="text/javascript">
+	
+</script>

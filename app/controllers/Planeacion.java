@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 
 import models.Cirugia;
+import models.DisponibilidadQuirofano;
 import models.Indicador;
 import models.ProfesionalSalud;
 import models.Programacion;
@@ -31,11 +32,12 @@ import play.mvc.Controller;
 
 public class Planeacion extends Controller {
 	
+	private static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
+	private static String errorMessage;
+	private static String successMessage;
+	
 	 public static void index() {
 		 List<models.Planeacion> planeaciones = models.Planeacion.find("order by fechaProgramacion desc").fetch();
-		 /* Query query = JPA.em().createQuery("SELECT p, COUNT(p.fechaProgramacion) as numProgramacion FROM "
-		 		+ "Programacion p GROUP BY p.fechaProgramacion");
-		 List<Object[]> programaciones = query.getResultList(); */
 		 render(planeaciones);
 	 }
 	 
@@ -82,6 +84,11 @@ public class Planeacion extends Controller {
 				quirofanos.add(cirugia.getQuirofano());
 			}
 		}
+		 renderArgs.put("errorMessage", errorMessage);
+		 renderArgs.put("successMessage", successMessage);
+		 errorMessage = "";
+		 successMessage = "";
+		 
 		 render(cirugias,quirofanos, programacion, programaciones);
 	 }
 	 
@@ -90,44 +97,81 @@ public class Planeacion extends Controller {
 		 render (programacion);
 	 }
 	 
-	 public static String modificarCirugia(String json){
+	 public static void modificarCirugia(String json, int programacion){
 		 
-		 String message = "";
+		 ArrayList<String> badSurgeries = new ArrayList<String>();
 		 try {
 			 JSONArray cirugias = new JSONArray(json);
 			 for(int i = 0; i < cirugias.length(); i++){
-				 JSONObject cirugiajson = cirugias.getJSONObject(i);
-				 Cirugia cirugia = Cirugia.findById(cirugiajson.getInt("id"));
-				 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-				 
+				JSONObject cirugiajson = cirugias.getJSONObject(i);
+				Cirugia cirugia = Cirugia.findById(cirugiajson.getInt("id"));
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+				
+							
 		        String initDate = cirugiajson.getString("start_date");
 		        String endDate = cirugiajson.getString("end_date");
 		        
-		        	
-		            Date dateStart = formatter.parse(initDate);
-		            Date dateEnd = formatter.parse(endDate);
-		            cirugia.setFechaIngreso(dateStart);
+	            Date dateStart = formatter.parse(initDate);
+	            Date dateEnd = formatter.parse(endDate);
+	            
+	            Calendar cale = Calendar.getInstance();
+	            cale.setTime(dateStart);
+	            int day = (cale.get(Calendar.DAY_OF_WEEK) - 1 == 0) ? 7  : cale.get(Calendar.DAY_OF_WEEK) - 1;
+	            
+	            Quirofano quiro = cirugia.getQuirofano();
+	            List<DisponibilidadQuirofano> dispoQuirofanos = quiro.getDisponibilidadQuirofanos();
+	            boolean enHorario = false;
+	            for(int j = 0; j < dispoQuirofanos.size() && !enHorario; j++){
+	            	DisponibilidadQuirofano disponibilidadQuirofano = dispoQuirofanos.get(j);
+	            	
+	            	if(disponibilidadQuirofano.getRepeticion().contains(day+"")){
+	            		
+	            		long timeStart = disponibilidadQuirofano.getHoraInicio().getTime() % MILLIS_PER_DAY;
+		            	long timeEnd  = disponibilidadQuirofano.getHoraFin().getTime() % MILLIS_PER_DAY;
+		            	
+		            	long hourStart = dateStart.getTime() % MILLIS_PER_DAY;
+		            	long hourEnd  = dateEnd.getTime() % MILLIS_PER_DAY;
+		            	
+		            	if(hourStart >= timeStart && hourEnd <= timeEnd){
+		            		enHorario = true;
+		            	}
+	            	}	            	
+	            }
+	            
+	            if(enHorario){
+	            	cirugia.setFechaIngreso(dateStart);
 		            cirugia.setHoraCierre(dateEnd);
 		            cirugia.save();
+	            }else{
+	            	badSurgeries.add(cirugia.getPaciente().getNombres() + " " + cirugia.getPaciente().getApellidos());
+	            }
 			 }
-			 message = "Se realizo la modificación exitosamente";
+			 successMessage = "Se realizo la modificación exitosamente";
 		 } catch (ParseException e) {
             e.printStackTrace();
-            message = "Ocurrio un error al hacer la modificación";
+            errorMessage = "Ocurrio un error al hacer la modificación";
 		 }
 		 
-		 return message;
+		 if(badSurgeries.size() > 0){
+			 errorMessage = "A los siguientes pacientes quirurgicos no se pudieron modificar, debido a la disponibilidad del quirofano: \n";
+			 for (String string : badSurgeries) {
+				errorMessage += string +"\n";
+			}
+		 }
 	}
 	 
 	 public static void changeQuirofanoCirugia(int idProgramacion){
 		 Programacion programacion = Programacion.findById(idProgramacion);
 		 List<Quirofano> quirofanos = Quirofano.findAll();
+		 renderArgs.put("errorMessage", errorMessage);
+		 renderArgs.put("successMessage", successMessage);
+		 errorMessage = "";
+		 successMessage = "";
 		 render(programacion, quirofanos);
 	 }
 	 
-	 public static void changeSurgeryQuirofano(int cirugia, int quirofano, Date dateinit, Date dateEnd, String timeInit, String timeEnd){
-		 
-		 if(cirugia > 0 && quirofano > 0 && dateinit != null && dateEnd != null && timeInit != null && !timeInit.equals("") && timeEnd != null && !timeEnd.equals("")){
+	 public static void changeSurgeryQuirofano(int cirugia, int quirofano, Date dateinit, String timeInit, String duracion){
+		 if(cirugia > 0 && quirofano > 0 && dateinit != null && timeInit != null && !timeInit.equals("") && duracion != null && !duracion.equals("") && duracion.contains(":")){
 			Cirugia cirugiaObj = Cirugia.findById(cirugia);
 			Query query = JPA.em().createQuery("SELECT c FROM Cirugia c WHERE c.quirofano.idQuirofano = :qui AND c.programacion.idProgramacion = :progra AND c.idCirugia != :cir");
 			query.setParameter("qui", quirofano);
@@ -141,43 +185,70 @@ public class Planeacion extends Controller {
 			calInit.set(Calendar.MINUTE, Integer.parseInt(timeBegin[1]));
 			dateinit = calInit.getTime();
 			
-			Calendar calEnd = Calendar.getInstance();
-			calEnd.setTime(dateEnd);
-			String[] timeLast = timeEnd.split(":");
-			calEnd.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeLast[0]));
-			calEnd.set(Calendar.MINUTE, Integer.parseInt(timeLast[1]));
-			dateEnd = calEnd.getTime();
+			String[] timeLast = duracion.split(":");
+			calInit.add(Calendar.HOUR_OF_DAY, Integer.parseInt(timeLast[0]));
+			calInit.add(Calendar.MINUTE, Integer.parseInt(timeLast[1]));
+			Date dateEnd = calInit.getTime();
 			
 			List<Cirugia> cirugias = query.getResultList();
 			boolean noEspacio = false;
 			for (int i = 0; i < cirugias.size() && !noEspacio; i++) {
 				Cirugia surgery = cirugias.get(i);
-				if((surgery.getFechaIngreso().compareTo(dateinit) >= 0 && surgery.getHoraCierre().compareTo(dateinit) <= 0)
-						|| (surgery.getFechaIngreso().compareTo(dateEnd) >= 0 && surgery.getHoraCierre().compareTo(dateEnd) <= 0)){
+				if((surgery.getFechaIngreso().compareTo(dateinit) <= 0 && surgery.getHoraCierre().compareTo(dateinit) >= 0)
+						|| (surgery.getFechaIngreso().compareTo(dateEnd) <= 0 && surgery.getHoraCierre().compareTo(dateEnd) >= 0)){
 					noEspacio = true;
+					errorMessage = "Cirugía se cruza con otra cirugía en el mismo quirófano";
 				}
 			}
+			long hourBegin = dateinit.getTime() % MILLIS_PER_DAY;
+			long hourEnd = dateEnd.getTime() % MILLIS_PER_DAY;
+			
+			
+			
 			
 			if(!noEspacio){
-				cirugiaObj.setFechaIngreso(dateinit);
-				cirugiaObj.setHoraCierre(dateEnd);
-				Quirofano quirofano2 = Quirofano.findById(quirofano);
-				cirugiaObj.setQuirofano(quirofano2);
-				cirugiaObj.save();
-				String idProgramacion = cirugiaObj.getProgramacion().getIdProgramacion() +"";
-				programacionDetails(idProgramacion);
+				boolean quiDispo = false;
+				List<DisponibilidadQuirofano> disponibilidadQuirofanos = DisponibilidadQuirofano.find("quirofano.idQuirofano = ? AND habilitado = true", quirofano).fetch(); 
+				for(int i = 0 ; i < disponibilidadQuirofanos.size() && !quiDispo; i++){
+					
+					Calendar calBegin = Calendar.getInstance();
+					calBegin.setTime(dateinit);
+					
+					int dayofweek = calBegin.get(Calendar.DAY_OF_WEEK) - 1;
+					dayofweek = (dayofweek == 0) ? 7 : dayofweek;
+					DisponibilidadQuirofano dis = disponibilidadQuirofanos.get(i);					
+					
+					if(dis.getRepeticion().contains(dayofweek+"")){
+						if(hourBegin >= (dis.getHoraInicio().getTime() % MILLIS_PER_DAY) && hourEnd <= (dis.getHoraFin().getTime()% MILLIS_PER_DAY)){
+							quiDispo = true;
+						}
+					}
+				}
+				
+				if(quiDispo){
+					cirugiaObj.setFechaIngreso(dateinit);
+					cirugiaObj.setHoraCierre(dateEnd);
+					Quirofano quirofano2 = Quirofano.findById(quirofano);
+					cirugiaObj.setQuirofano(quirofano2);
+					cirugiaObj.save();
+					String idProgramacion = cirugiaObj.getProgramacion().getIdProgramacion() +"";
+					successMessage = "Se realizo el cambio exitosamente de la cirugía del paciente: " + cirugiaObj.getPaciente().getNombres() + " " + cirugiaObj.getPaciente().getApellidos(); 
+					programacionDetails(idProgramacion);
+				}else{
+					errorMessage = "El tiempo de la cirugía no concide con la disponibilidad del quirófano seleccionado";
+				}
 			}
+		 }else{
+			 params.flash();
 		 }
-
+		 
 		 if(cirugia > 0){
 			Cirugia cirugiaObj = Cirugia.findById(cirugia);
 			int idProgramacion = cirugiaObj.getProgramacion().getIdProgramacion();
 			changeQuirofanoCirugia(idProgramacion);
 		 }else{
-			 index();
+			index();
 		 }
-		
-		 
 	 }
 	 
 	 public static void deleteCirugia(int idProgramacion){
@@ -210,8 +281,7 @@ public class Planeacion extends Controller {
 		 programacionDetails(cirugia2.getProgramacion().getIdProgramacion()+"");
 	 }
 
-
-	 
+ 
 	 public static String establecerProgramacionPrincipal(int idProgramacion){
 		 Programacion programacion = Programacion.findById(idProgramacion);
 		 
@@ -229,6 +299,29 @@ public class Planeacion extends Controller {
 		 }catch(Exception  e){
 			 e.printStackTrace();
 		 }
-		 return "Error al establecer la programación com principal";
+		 return "Error al establecer la programación como principal";
+	 }
+	 
+	 public static String getHorariosQuirofano(int idQuirofano){
+		 Quirofano quirofano = Quirofano.findById(idQuirofano);
+		 String horarios = "";
+		 if(quirofano != null){
+			 
+			 for (DisponibilidadQuirofano disponibilidadQuirofano : quirofano.getDisponibilidadQuirofanos()) {
+				if(disponibilidadQuirofano.getHabilitado()){
+					String[] days = {"", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"};
+					String[] array = disponibilidadQuirofano.getRepeticion().split(",");
+					String dias = "";
+					for (String string : array) {
+						int i = Integer.parseInt(string);
+						dias += days[i] +",";
+					}
+					dias = dias.substring(0, dias.length() -1);
+					dias += " " + disponibilidadQuirofano.getHoraInicio() + " - " + disponibilidadQuirofano.getHoraFin();
+					horarios += dias +"\n";
+				}
+			}
+		 }
+		 return horarios;
 	 }
 }

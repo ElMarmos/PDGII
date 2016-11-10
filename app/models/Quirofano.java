@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 
 import java.util.ArrayList;
@@ -21,8 +23,9 @@ public class Quirofano extends GenericModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	private int idQuirofano;
-
+	@Expose
 	private String nombreQuirofano;
 
 	//bi-directional many-to-one association to Cirugia
@@ -33,6 +36,11 @@ public class Quirofano extends GenericModel implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="idPabellon")
 	private Pabellon pabellon;
+	
+	//bi-directional many-to-many association to Quirofano
+	@OneToMany(mappedBy="quirofano")
+	@Expose
+	private List<DisponibilidadQuirofano> disponibilidadQuirofanos;
 
 	//bi-directional many-to-many association to Quirofano
 	@OneToMany(mappedBy="quirofano")
@@ -40,6 +48,7 @@ public class Quirofano extends GenericModel implements Serializable {
 	
 	//bi-directional many-to-many association to Quirofano
 	@OneToMany(mappedBy="quirofano")
+	@Expose
 	private List<QuirofanoEspecialidad> quirofanoEspecialidades;
 	
 	//bi-directional many-to-one association to CamaPaciente
@@ -100,6 +109,26 @@ public class Quirofano extends GenericModel implements Serializable {
 
 	public void setPabellon(Pabellon pabellon) {
 		this.pabellon = pabellon;
+	}
+	
+	public List<DisponibilidadQuirofano> getDisponibilidadQuirofanos() {
+		return disponibilidadQuirofanos;
+	}
+
+	public void setDisponibilidadQuirofanos(
+			List<DisponibilidadQuirofano> disponibilidadQuirofanos) {
+		this.disponibilidadQuirofanos = disponibilidadQuirofanos;
+	}
+
+	public DisponibilidadQuirofano addDisponibilidadQuirofanos(DisponibilidadQuirofano disponibilidadQuirofano){
+		getDisponibilidadQuirofanos().add(disponibilidadQuirofano);
+		disponibilidadQuirofano.setQuirofano(this);
+		return disponibilidadQuirofano;
+	}
+	public DisponibilidadQuirofano removeDisponibilidadQuirofanos(DisponibilidadQuirofano disponibilidadQuirofano){
+		getDisponibilidadQuirofanos().add(disponibilidadQuirofano);
+		disponibilidadQuirofano.setQuirofano(null);
+		return disponibilidadQuirofano;
 	}
 
 	public List<QuirofanoDotacion> getQuirofanoDotaciones() {

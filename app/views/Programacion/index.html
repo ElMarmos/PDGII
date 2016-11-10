@@ -1,69 +1,126 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+  <li class="breadcrumb-item active">Inicio Programación</li>
+</ol>
+<center><h1>Inicio de Programación</h1></center>
+<center><p class="lead">Especifique la siguiente información para poder iniciar con el proceso de programación de quirofanos</p></center>
+<hr/>
+<br/>
 <form action="@{Programacion.initProgramacion()}" method="POST">
 	
-	
 		<div class="form-group">
-			<label for="numPacientes">Número de pacientes</label>
+			<label for="numPacientes">Número de pacientes <span class="glyphicon glyphicon-info-sign info-icon" aria-hidden="true" data-toggle="tooltip" title="Número de solicitudes de pacientes que serán incluidas en la programación"></span></label>
 			<input type="number" class="form-control" id="numPacientes" name="numPacientes" placeholder="Número de pacientes">
 		</div>
-		<label for="cirujanos">Cirujanos</label>
-		<div style="width: 600px; height: 400px; overflow-y: scroll;" class="form-group">
-			#{list items:cirujanos, as:'cirujano'}
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" name="cirujanos" value="${cirujano.idProfesionalSalud}" > ${cirujano.nombres} ${cirujano.apellidos}
-					</label>
-				</div>
-		    #{/list}
-		</div>
-		<label for="quirofanos">Anestesiologos</label>
-		<div style="width: 600px; height: 400px; overflow-y: scroll;" class="form-group">
-			#{list items:anestesiologos, as:'aneste'}
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" name="anestesiologos" value="${aneste.idProfesionalSalud}" > ${aneste.nombres} ${aneste.apellidos}
-					</label>
-				</div>
-		    #{/list}
-		</div>
-		<label for="quirofanos">Quirofanos</label>
-		<div style="width: 600px; height: 400px; overflow-y: scroll;" class="form-group">
-			#{list items:quirofanos, as:'quiro'}
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" name="quirofanos" value="${quiro.idQuirofano}" > ${quiro.nombreQuirofano}
-					</label>
-				</div>
-		    #{/list}
+		<div class="form-group">
+			<label for="cirujanos">Cirujanos <span class="glyphicon glyphicon-info-sign info-icon" aria-hidden="true" data-toggle="tooltip" title="Elija los cirujanos que serán incluidos en el proceso de planeación"></span></label>
+			<div style="width: 100%; height: 400px; overflow-y: scroll;" class="form-group">
+	          	<div class="list-group" id="listcirujanos">
+      				<a  class="list-group-item active">Todos <input title="toggle all" type="checkbox" class="all pull-right"></a>
+	          
+					#{list items:cirujanos, as:'cirujano'}
+						<a  class="list-group-item">${cirujano.nombres} ${cirujano.apellidos} <input type="checkbox" name="cirujanos" class="pull-right" value="${cirujano.idProfesionalSalud}"></a>
+				    #{/list}
+			    </div>
+			</div>
 		</div>
 		<div class="form-group">
-			<label for="datetimepicker1">Fecha inicio programación</label>
+			<label for="quirofanos">Anestesiólogos <span class="glyphicon glyphicon-info-sign info-icon" aria-hidden="true" data-toggle="tooltip" title="Elija los anestesiólogos que serán incluidos en el proceso de planeación"></span></label>
+			<div style="width: 100%; height: 400px; overflow-y: scroll;" class="form-group">
+				<div class="list-group" id="listAnestesiologos">
+	  				<a  class="list-group-item active">Todos <input title="toggle all" type="checkbox" class="all pull-right"></a>
+					#{list items:anestesiologos, as:'aneste'}
+						<a  class="list-group-item">${aneste.nombres} ${aneste.apellidos} <input type="checkbox" name="anestesiologos" class="pull-right" value="${aneste.idProfesionalSalud}"></a>
+				    #{/list}
+			    </div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="asistentes">Asistentes <span class="glyphicon glyphicon-info-sign info-icon" aria-hidden="true" data-toggle="tooltip" title="Elija los asistentes que serán incluidos en el proceso de planeación"></span></label>
+			<div style="width: 100%; height: 400px; overflow-y: scroll;" class="form-group">
+				<div class="list-group" id="listAsistentes">
+	  				<a class="list-group-item active">Todos <input title="toggle all" type="checkbox" class="all pull-right"></a>
+					#{list items:asistentes, as:'asis'}
+						<a  class="list-group-item">${asis.nombres} ${asis.apellidos} <input type="checkbox" name="asistentes" class="pull-right" value="${asis.idProfesionalSalud}"></a>
+				    #{/list}
+			    </div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="quirofanos">Quirofanos <span class="glyphicon glyphicon-info-sign info-icon" aria-hidden="true" data-toggle="tooltip" title="Elija los quirofanos que serán incluidos en el proceso de planeación"></span></label>
+			<div style="width: 100%; height: 400px; overflow-y: scroll;" class="form-group">
+				<div class="list-group" id="listQuirofanos">
+	  				<a class="list-group-item active">Todos <input title="toggle all" type="checkbox" class="all pull-right"></a>
+					#{list items:quirofanos, as:'quiro'}
+						<a class="list-group-item">${quiro.nombreQuirofano} <input type="checkbox" name="quirofanos" class="pull-right" value="${quiro.idQuirofano}"></a>
+				    #{/list}
+			    </div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="datetimepicker1">Fecha inicio programación <span class="glyphicon glyphicon-info-sign info-icon" aria-hidden="true" data-toggle="tooltip" title="Elija la fecha de inicio de programación en la cual empezaran a realizar las cirugias"></span></label>
 			<div class="form-group">
                 <input type="date" name="dateBegin" class="form-control">
             </div>
 		</div>
 		<div class="form-group">
-			<label for="datetimepicker2">Fecha fin programación</label>
+			<label for="datetimepicker2">Fecha fin programación <span class="glyphicon glyphicon-info-sign info-icon" aria-hidden="true" data-toggle="tooltip" title="Elija la fecha fin de programación, la cual será el limite para programar la ejecución de las cirugias"></span></label>
 			<div class="form-group">
                 <input type="date" name="dateEnd" class="form-control">
             </div>
 		</div>
-		<label for="asistentes">Asistentes</label>
-		<div style="width: 600px; height: 400px; overflow-y: scroll;" class="form-group">
-			#{list items:asistentes, as:'asis'}
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" name="asistentes" value="${asis.idProfesionalSalud}" > ${asis.nombres} ${asis.apellidos}
-					</label>
-				</div>
-		    #{/list}
-		</div>
+		
 		<div class="form-group">
-			<label for="timeProcessing">Tiempo de procesamiento (Minutos)</label>
+			<label for="timeProcessing">Tiempo de procesamiento máximo (Minutos) <span class="glyphicon glyphicon-info-sign info-icon" aria-hidden="true" data-toggle="tooltip" title="Elija el tiempo de procesamiento máximo, en el cual es sistema va a intentar encontrar la mejor programación de quirofanos"></span></label>
 			<input type="number" class="form-control" id="timeProcessing" name="timeProcessing" placeholder="Tiempo Procesamiento">
 		</div>
 	    <br/>
-	    <button type="submit" class="btn btn-default">Iniciar</button>
+	    <center><button type="submit" class="btn btn-default">Iniciar</button></center>
 </form> 
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip(); 
+	});
+	/* toggle all checkboxes in group */
+	$('.all').click(function(e){
+		e.stopPropagation();
+		var $this = $(this);
+	    if($this.is(":checked")) {
+	    	$this.parents('.list-group').find("[type=checkbox]").prop("checked",true);
+	    }
+	    else {
+	    	$this.parents('.list-group').find("[type=checkbox]").prop("checked",false);
+	        $this.prop("checked",false);
+	    }
+	});
+
+	$('[type=checkbox]').click(function(e){
+	  e.stopPropagation();
+	});
+
+	/* toggle checkbox when list group item is clicked */
+	$('.list-group a').click(function(e){
+	  
+	    e.stopPropagation();
+	  
+	  	var $this = $(this).find("[type=checkbox]");
+	    if($this.is(":checked")) {
+	    	$this.prop("checked",false);
+	    }
+	    else {
+	    	$this.prop("checked",true);
+	    }
+	  
+	    if ($this.hasClass("all")) {
+	    	$this.trigger('click');
+	    }
+	});
+
+	
+</script>
 

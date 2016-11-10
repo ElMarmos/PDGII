@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 import play.db.jpa.Model;
 
@@ -22,18 +24,21 @@ public class BloqueDisponibilidad extends GenericModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	private int idBloqueDisponibilidad;
 	
 	@Temporal(TemporalType.DATE)
+	@Expose
 	private Date fechaFin;
 
 	@Temporal(TemporalType.DATE)
+	@Expose
 	private Date fechaInicio;
-
+	@Expose
 	private Time horaFin;
-
+	@Expose
 	private Time horaInicio;
-	
+	@Expose
 	private String dias;
 
 	//bi-directional many-to-one association to BloqueQuirurgico
@@ -44,6 +49,7 @@ public class BloqueDisponibilidad extends GenericModel implements Serializable {
 	//bi-directional many-to-one association to DisponibilidadProfesional
 	@ManyToOne
 	@JoinColumn(name="idDisponibilidadProfesional")
+	@Expose
 	private DisponibilidadProfesional disponibilidadprofesional;
 
 	public BloqueDisponibilidad(BloqueQuirurgico bloqueQuirurjico, DisponibilidadProfesional disponibilidadProfesional, Date fechaInicio, Time horaInicio, Date fechaFin, Time horaFin, String dias) {
@@ -109,5 +115,12 @@ public class BloqueDisponibilidad extends GenericModel implements Serializable {
 	public void setDisponibilidadprofesional(DisponibilidadProfesional disponibilidadprofesional) {
 		this.disponibilidadprofesional = disponibilidadprofesional;
 	}
+	public String getDias() {		
+		return dias;		
+	}			
+	public void setDias(String dias) {		
+		this.dias = dias;		
+	}
+	
 
 }

@@ -4,15 +4,21 @@
 	var cirugias = [];
 	var events = [];
 </script>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.index()}">Generaciones de Programación</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.programacionesPorPlaneacion(programacion.planeacion.idPlaneacion)}">Programaciones</a></li>
+  <li class="breadcrumb-item active">Programación - ${programacion.idProgramacion}</li>
+</ol>
+<center><h1>Detalles Programación</h1></center>
+<center><p class="lead">Detalles de una programación en particular</p></center>
+<hr/>
+<br/>
+
 
 #{if cirugias.size > 0}
 
 
-<div class="row">
-	<div class="col-md-12">
-		
-	</div>
-</div>
 <ul class="nav nav-tabs" id="tabscharts">
   <li class="active"><a data-toggle="tab" href="#gantt">Gantt</a></li>
   <li><a data-toggle="tab" href="#barras" onclick="initBarChart();">Barras</a></li>
@@ -24,20 +30,43 @@
   
 </ul>
 <br/>
+<div class="container-fluid" style="text-align: right;">
+	<div class="btn-group">
+  <button type="button" class="btn btn-primary dropdown-toggle"
+          data-toggle="dropdown">
+    Opciones <span class="caret"></span>
+  </button>
+ 
+  <ul class="dropdown-menu" role="menu">
+    <li class="list-group-item"><a href="@{Planeacion.compareProgramacion(programacion.idProgramacion)}">Comparar</a></li>
+	  <li class="list-group-item"><a href="@{Planeacion.changeQuirofanoCirugia(programacion.idProgramacion)}">Editar Cirugia</a></li>
+	  <li class="list-group-item"><a href="@{Planeacion.deleteCirugia(programacion.idProgramacion)}">Eliminar Cirugia</a></li>
+	  <li class="list-group-item"><a href="@{Planeacion.enableCirugia(programacion.idProgramacion)}">Habilitar Cirugia</a></li>
+	  #{if programacion.principal == false }
+	  	<li class="list-group-item" id="establecer"><a onclick="establecerProgramacion();">Establecer Programación Principal</a></li>
+	  #{/if}
+	  <li class="list-group-item" ><a><span id="saveData">Guardar</span></a></li>
+  </ul>
+</div>
+</div>
+<br/>
 <div class="tab-content">
   <div id="gantt" class="tab-pane fade in active">
-  	<form class="form-inline">
-	  <div class="form-group">
-	    <label for="quirofano1">Quirofano</label>
-	    <select class="form-control" id="quirofano1" onchange="updateGantt();">
-	    	#{list items:quirofanos, as:'quirofano'}
-	    		<option>${quirofano.nombreQuirofano}</option>
-	    	#{/list}
-		</select>
-		<br/>
-	  </div>
-	  <br/>
-	</form>
+  	<div class="container">
+  		<form class="form-inline">
+		  <div class="form-group">
+		    <label for="quirofano1">Quirofano</label>
+		    <select class="selectpicker form-control" data-live-search="true" id="quirofano1" onchange="updateGantt();">
+		    	#{list items:quirofanos, as:'quirofano'}
+		    		<option>${quirofano.nombreQuirofano}</option>
+		    	#{/list}
+			</select>
+			<br/>
+		  </div>
+		  <br/>
+		</form>
+  	</div>
+  	<br/>
   	<div id="ganttChart" ></div>
   </div>
   <div id="barras" class="tab-pane fade">
@@ -49,7 +78,7 @@
 	  		<form class="form-inline">
 			  <div class="form-group">
 			    <label for="quirofano">Quirofano</label>
-			    <select class="form-control" id="quirofano" onchange="updateBooking();">
+			    <select class="selectpicker form-control" data-live-search="true" id="quirofano" onchange="updateBooking();">
 			    	#{list items:quirofanos, as:'quirofano'}
 			    		<option>${quirofano.nombreQuirofano}</option>
 			    	#{/list}
@@ -119,19 +148,7 @@
   </div>
 </div>
 <a href="@{Planeacion.programacionesPorPlaneacion(programacion.planeacion.idPlaneacion)}"><button type="button" class="btn btn-default">Volver</button></a>
-<button class="btn btn-primary" data-toggle="collapse" data-target="#collapse1">Opciones</button>
-<div id="collapse1" class="panel-collapse collapse">
-	<ul class="list-group">
-	  <li class="list-group-item"><a href="@{Planeacion.compareProgramacion(programacion.idProgramacion)}">Comparar</a></li>
-	  <li class="list-group-item"><a href="@{Planeacion.changeQuirofanoCirugia(programacion.idProgramacion)}">Editar Cirugia</a></li>
-	  <li class="list-group-item"><a href="@{Planeacion.deleteCirugia(programacion.idProgramacion)}">Eliminar Cirugia</a></li>
-	  <li class="list-group-item"><a href="@{Planeacion.enableCirugia(programacion.idProgramacion)}">Habilitar Cirugia</a></li>
-	  #{if programacion.principal == false }
-	  	<li class="list-group-item" id="establecer"><a onclick="establecerProgramacion();">Establecer Programación Principal</a></li>
-	  #{/if}
-	  <li class="list-group-item"><a onclick="serializeScheduler();">Guardar</a></li>
-	</ul>
-</div>
+
 
 <script>
 	
@@ -268,30 +285,13 @@
 	}
 
 	function serializeScheduler(){
-
 		var json = scheduler.toJSON();
-
-		$.ajax({
-			url : '@{Planeacion.modificarCirugia}',
-			type : "POST",
-			data : {
-				json : json
-			},
-			success : function(data){
-				
-				var successMessage = $("#successMessage");
-				successMessage.empty();
-				successMessage.append(data);
-				$("#successAlert").css("display", "block");
-				
-			}
-		}).fail(function() {
-			var errorMessage = $("#successError");
-			errorMessage.empty();
-			errorMessage.append(data);
-			$("#errorAlert").css("display", "block");
-		});
+		$.post( "@{Planeacion.modificarCirugia}", { json: json, programacion : ${programacion.idProgramacion} }, function(data){
+			window.location.replace('@{Planeacion.programacionDetails(programacion.idProgramacion)}');
+		} );
 	}
+
+	$("#saveData").click(serializeScheduler);
 
 	function establecerProgramacion(){
 		$.ajax({

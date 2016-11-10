@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 
 import java.sql.Timestamp;
@@ -23,23 +25,25 @@ public class Solicitud extends GenericModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	private int idSolicitud;
-
+	@Expose
 	private Timestamp fechaAtencion;
-
+	@Expose
 	private Timestamp fechaCirugia;
-
+	@Expose
 	private Timestamp fechaProgramacion;
-
+	@Expose
 	private Timestamp fechaSolicitud;
-
+	@Expose
 	private String jornadaPreferencia;
-
+	@Expose
 	private String tipoPaciente;
 
 	//bi-directional many-to-one association to Paciente
 	@ManyToOne
 	@JoinColumn(name="idPaciente")
+	@Expose
 	private Paciente paciente;
 
 	@ManyToOne
@@ -156,6 +160,24 @@ public class Solicitud extends GenericModel implements Serializable {
 		this.cirujano = cirujano;
 	}
 	
+	public List<Especialidad> getEspecialidades(){
+		List<Especialidad> especialidades  = new ArrayList<Especialidad>();
+		
+		for (SolicitudProcedimientos soliPro : solicitudProcedimientos) {
+			Especialidad espe = soliPro.getProcedimiento().getEspecialidad();
+			boolean esta = false;
+			for(int i = 0; i < especialidades.size() && !esta; i++){
+				if(espe.getIdEspecialidad() == especialidades.get(i).getIdEspecialidad()){
+					esta = true;
+				}
+			}
+			if(!esta){
+				especialidades.add(espe);
+			}
+		}
+		
+		return especialidades;
+	}
 	
 
 	

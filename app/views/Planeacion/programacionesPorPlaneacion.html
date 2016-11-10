@@ -1,13 +1,22 @@
 #{extends 'main.html' /}
 
 #{set title:'programacionesPorFecha.html' /}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.index()}">Generaciones de Programación</a></li>
+  <li class="breadcrumb-item active">Programaciones</li>
+</ol>
+<center><h1>Programaciones por Generación de Programaciones</h1></center>
+<center><p class="lead">Lista de las programaciones de una generación de programaciones en específico</p></center>
+<hr/>
+<br/>
 
 <table class="table table-hover">
 	<thead>
 		<th>Fecha Inicio</th>
 		<th>Fecha Fin</th>
 		<th>Fecha de Programación</th>
-		<th>Indicador</th>
+		<th>Promedio Indicadores</th>
 		<th></th>
 	</thead>
 	<tbody>

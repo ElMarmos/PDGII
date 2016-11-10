@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 
 import java.util.ArrayList;
@@ -21,8 +23,9 @@ public class Especialidad extends GenericModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	private int idEspecialidad;
-
+	@Expose
 	private String nombreEspecialidad;
 
 	//bi-directional many-to-one association to BloqueQuirurgico

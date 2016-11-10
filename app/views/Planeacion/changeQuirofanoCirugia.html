@@ -1,13 +1,22 @@
 #{extends 'main.html' /}
 #{set title:'changeQuirofanoCirugia.html' /}
-
-<center><p>Escoja la cirugia a la que quiere cambiar de quirofano y de fecha</p></center>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.index()}">Generaciones de Programación</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.programacionesPorPlaneacion(programacion.planeacion.idPlaneacion)}">Programaciones</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.programacionDetails(programacion.idProgramacion)}">Programación - ${programacion.idProgramacion}</a></li>
+  <li class="breadcrumb-item active">Editar Cirugía</li>
+</ol>
+<center><h1>Editar Cirugia</h1></center>
+<center><p class="lead">Escoja la cirugia a la que quiere cambiar de quirofano y de fecha</p></center>
+<hr/>
+<br/>
 
 <form class="form-horizontal" action="@{Planeacion.changeSurgeryQuirofano()}" method="POST">
   <div class="form-group">
     <label for="cirugia" class="col-sm-2 control-label">Cirugia</label>
     <div class="col-sm-10">
-      <select id="cirugia" name="cirugia" class="form-control">
+      <select id="cirugia" name="cirugia" class="selectpicker form-control" data-live-search="true">
       	<option value="0">Seleccione cirugia</option>
       	#{list items:programacion.programacionCirugias , as:'cirugia'}
    			<option value="${cirugia.idCirugia}">${cirugia.paciente.nombres} ${cirugia.paciente.apellidos}</option>
@@ -18,7 +27,7 @@
   <div class="form-group">
     <label for="quirofano" class="col-sm-2 control-label">Quirofanos</label>
     <div class="col-sm-10">
-      <select id="quirofano" name="quirofano" class="form-control">
+      <select id="quirofano" name="quirofano" class="selectpicker form-control" data-live-search="true">
       	<option value="0">Seleccione quirofano</option>
       	#{list items:quirofanos , as:'quirofano'}
 			<option value="${quirofano.idQuirofano}">${quirofano.nombreQuirofano}</option>
@@ -33,21 +42,15 @@
     </div>
   </div>
   <div class="form-group">
-	<label for="dateEnd" class="col-sm-2 control-label">Fecha fin cirugia</label>
-	<div class="col-sm-10">
-        <input type="date" name="dateEnd" class="form-control">
-    </div>
-  </div>
-  <div class="form-group">
 	<label for="timeInit" class="col-sm-2 control-label">Hora inicio cirugia</label>
 	<div class="col-sm-10">
         <input type="time" name="timeInit" class="form-control">
     </div>
   </div>
   <div class="form-group">
-	<label for="timeEnd" class="col-sm-2 control-label">Hora fin cirugia</label>
+	<label for="duracion" class="col-sm-2 control-label">Duración Cirugía</label>
 	<div class="col-sm-10">
-        <input type="time" name="timeEnd" class="form-control">
+        <input type="text" name="duracion" placeholder="HH:MM" class="form-control">
     </div>
   </div>
   <div class="form-group">
@@ -58,3 +61,10 @@
   </div>
 
 </form>
+<script type="text/javascript">
+  $("#quirofano").change(function(){
+    &.ajax({
+      url: "@{Planeacion.getHorariosQuirofano()}"
+    });
+  })
+</script>

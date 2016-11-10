@@ -1,18 +1,36 @@
 #{extends 'main.html' /}
 #{set title:'matchCirugias.html' /}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+  <li class="breadcrumb-item active">Emparejamiento Cirugias</li>
+</ol>
 
+<center><h1>Emparejamiento de Cirugias</h1></center>
+<center><p class="lead">Escoja el cirujano lider para realizar los procedimientos de los pacientes listados en la columna izquierda.</p></center>
+<hr/>
+<br/>
 <form action="@{Programacion.saveMatchSurgeries()}" method="GET">
 	<center>
-		<table>
-			<tr>
-	    		<td><b>Cirugias</b></td>
-	    		<td><b>Cirujanos</b></td>
-	    	</tr>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Paciente Quirurgico</th>
+					<th>Especialidades</th>
+					<th>Cirujano Lider</th>
+				</tr>
+			</thead>
 	    	#{list items:solicitudes, as:'solicitud'}
 		    	<tr>
 		    		<td>${solicitud.paciente.nombres} ${solicitud.paciente.apellidos}</td>
 		    		<td>
-		    			<select id="${solicitud.idSolicitud}" name="${solicitud.idSolicitud}" class="form-control">
+		    			<ul>
+		    				#{list items:solicitud.especialidades, as:'especialidad'}
+		    					<li>${especialidad.nombreEspecialidad}</li>
+		    				#{/list}
+		    			</ul>
+		    		</td>
+		    		<td>
+		    			<select id="${solicitud.idSolicitud}" name="${solicitud.idSolicitud}" class="selectpicker form-control" data-live-search="true">
 		    				<option value="0">Seleccione Cirujano</option>
 		    				#{list items:cirujanos, as:'cirujano'}
 		    					#{if cirujano.hasEspecialidad(solicitud)}
@@ -25,6 +43,8 @@
 		    #{/list}
 	    	
 		</table>
-		<input type="submit" value="Guardar" />
+		<input type="submit" value="Guardar" class="btn btn-default" />
 	</center>
 </form>
+
+	

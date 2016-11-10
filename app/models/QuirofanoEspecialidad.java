@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 import play.db.jpa.Model;
 
@@ -21,6 +23,7 @@ public class QuirofanoEspecialidad extends GenericModel implements Serializable 
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	public int idQuirofanoEspecialidad;
 	
 	//bi-directional many-to-one association to Quirofano
@@ -31,6 +34,7 @@ public class QuirofanoEspecialidad extends GenericModel implements Serializable 
 	//bi-directional many-to-one association to Dotacion
 	@ManyToOne
 	@JoinColumn(name="idEspecialidad")
+	@Expose
 	private Especialidad especialidad;
 	
 	private double prioridad;

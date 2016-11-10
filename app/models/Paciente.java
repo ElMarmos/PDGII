@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 
 import java.util.ArrayList;
@@ -22,31 +24,33 @@ public class Paciente extends GenericModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	private int idPaciente;
-
+	@Expose
 	private String apellidos;
-
+	@Expose
 	private String ciudadPrecediencia;
 
 	@Temporal(TemporalType.DATE)
+	@Expose
 	private Date fechaNacimiento;
-
+	@Expose
 	private String nombres;
-
+	@Expose
 	private String numeroHistoriaClinica;
-
+	@Expose
 	private String numeroIdentificacion;
-
+	@Expose
 	private double peso;
-
+	@Expose
 	private double prioridad;
-
+	@Expose
 	private String sexo;
-
+	@Expose
 	private String talla;
-	
+	@Expose
 	private String eps;
-
+	@Expose
 	private String tipoIdentificacion;
 
 	//bi-directional many-to-one association to CamaPaciente

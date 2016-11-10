@@ -10,6 +10,7 @@
 	<link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
 	<link rel="stylesheet" media="screen" href="@{'/public/stylesheets/cupertino/jquery-ui.min.css'}">
 	<link rel="stylesheet" media="screen" href="@{'/public/stylesheets/dhtmlxscheduler.css'}">
+	<link rel="stylesheet" media="screen" href="@{'/public/stylesheets/bootstrap-select.min.css'}">
 	
 	<script src="@{'/public/javascripts/Chart.min.js'}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -20,6 +21,7 @@
 	<script src="@{'/public/javascripts/dhtmlxscheduler.js'}"></script>
 	<script src="@{'/public/javascripts/dhtmlxscheduler_serialize.js'}"></script>
 	<script src="@{'/public/javascripts/dhtmlxscheduler_collision.js'}"></script>
+	<script src="@{'/public/javascripts/bootstrap-select.min.js'}"></script>
 </head>
 <body>
 
@@ -33,7 +35,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Programación de Quirófanos</a>
+				<a class="navbar-brand" href="/">Programación de Quirófanos</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -41,13 +43,11 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="@{CargarBD.index}">Cargar Base de Datos</a></li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Opciones <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Action</a></li>
-							<li><a href="#">Another action</a></li>
+							<li><a href="@{Programacion.index}">Match Cirugías</a></li>
+							<li><a href="@{Planeacion.index}">Ver Planeaciones</a></li>
 							<li><a href="#">Something else here</a></li>
-							<li role="separator" class="divider"></li>
-							<li><a href="#">Separated link</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -57,13 +57,19 @@
 
 	
 	<div class="container">
-		<div class="alert alert-success" id="successAlert" style="display:none;">
-		  <p id="successMessage"></p>
-		</div>
-		<div class="alert alert-error" id="errorAlert" style="display:none;">
-		  <p id="errorMessage"></p>
-		</div>
+		#{if successMessage != null && !successMessage.equals("")}
+			<div class="alert alert-success" id="successAlert">
+			  <p id="successMessage">${successMessage}</p>
+			</div>
+		#{/if}
+
+		#{if errorMessage != null && !errorMessage.equals("")}
+			<div class="alert alert-danger" id="errorAlert">
+			  <p id="errorMessage">${errorMessage}</p>
+			</div>
+		#{/if}
 		#{doLayout /}
+		<br/><br/>
 	</div>
 
 </body>

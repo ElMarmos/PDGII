@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 
 import java.sql.Time;
@@ -22,21 +24,26 @@ public class DisponibilidadProfesional extends GenericModel implements Serializa
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	private int idDisponibilidadProfesional;
 
+	@Expose
 	private byte habilitado;
-
+	@Expose
 	private Time horaFin;
-
+	@Expose
 	private Time horaInicio;
 
 	@Lob
+	@Expose
 	private String periodoFin;
 
 	@Lob
+	@Expose
 	private String periodoInicio;
 
 	@Lob
+	@Expose
 	private String repeticion;
 
 	//bi-directional many-to-one association to BloqueDisponibilidad

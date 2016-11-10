@@ -1,13 +1,22 @@
 #{extends 'main.html' /}
 #{set title:'deleteCirugia.html' /}
-
-<center><p>Escoja la cirugia que desea eliminar</p></center>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.index()}">Generaciones de Programación</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.programacionesPorPlaneacion(programacion.planeacion.idPlaneacion)}">Programaciones</a></li>
+  <li class="breadcrumb-item"><a href="@{Planeacion.programacionDetails(programacion.idProgramacion)}">Programación - ${programacion.idProgramacion}</a></li>
+  <li class="breadcrumb-item active">Eliminar Cirugía</li>
+</ol>
+<center><h1>Eliminar Cirugia</h1></center>
+<center><p class="lead">Escoja la cirugia que desea eliminar</p></center>
+<hr/>
+<br/>
 
 <form class="form-horizontal" action="@{Planeacion.eliminarCirugia()}" method="POST">
   <div class="form-group">
     <label for="cirugia" class="col-sm-2 control-label">Cirugia</label>
     <div class="col-sm-10">
-      <select id="cirugia" name="cirugia" class="form-control">
+      <select id="cirugia" name="cirugia" class="selectpicker form-control" data-live-search="true">
       	<option value="0">Seleccione cirugia</option>
       	#{list items:cirugias , as:'cirugia'}
    			<option value="${cirugia.idCirugia}">${cirugia.paciente.nombres} ${cirugia.paciente.apellidos}</option>

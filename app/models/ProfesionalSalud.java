@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import play.db.jpa.GenericModel;
 
 import java.util.ArrayList;
@@ -20,16 +22,19 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Expose
 	private int idProfesionalSalud;
-
+	@Expose
 	private String apellidos;
 
 	@Lob
+	@Expose
 	private String contrato;
-
+	@Expose
 	private String nombres;
 
 	@Lob
+	@Expose
 	private String profesion;
 
 	// bi-directional many-to-one association to CirugiaProfesionalsalud
@@ -38,10 +43,12 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 
 	// bi-directional many-to-one association to DisponibilidadProfesional
 	@OneToMany(mappedBy = "profesionalsalud")
+	@Expose
 	private List<DisponibilidadProfesional> disponibilidadprofesionals;
 
 	// bi-directional many-to-one association to ProfesionalSaludEspecialidad
 	@OneToMany(mappedBy = "profesionalsalud")
+	@Expose
 	private List<ProfesionalSaludEspecialidad> profesionalsaludespecialidads;
 	
 	//bi-directional many-to-one association to CamaPaciente
@@ -193,5 +200,34 @@ public class ProfesionalSalud extends GenericModel implements Serializable {
 		planeacionProfesionales.setProfesionalSalud(null);
 		return planeacionProfesionales;
 	}
+	
+	
+	public boolean hasEspecialidad(Solicitud solicitud){		
+		if(solicitud != null && solicitud.getSolicitudProcedimientos() != null){
+			for(SolicitudProcedimientos soliProcedimientos: solicitud.getSolicitudProcedimientos()){		
+				if(profesionalsaludespecialidads != null){		
+					for (ProfesionalSaludEspecialidad profeEspecialidad : profesionalsaludespecialidads) {		
+						if(profeEspecialidad.getEspecialidad().getNombreEspecialidad().equals(soliProcedimientos.getProcedimiento().getEspecialidad().getNombreEspecialidad())){
+							return true;		
+						}		
+					}		
+				}		
+			}		
+		}		
+		return false;		
+				
+	}		
+			
+	public boolean hasEspecialidad(String especialidad){		
+		if(profesionalsaludespecialidads != null){		
+			for (ProfesionalSaludEspecialidad profeEspecialidad : profesionalsaludespecialidads) {		
+				if(profeEspecialidad.getEspecialidad().getNombreEspecialidad().equals(especialidad)){		
+					return true;		
+				}		
+			}		
+		}		
+				
+		return false;		
+  	}
 
 }
